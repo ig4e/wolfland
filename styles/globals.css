@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900;1000&display=swap");
+
+@layer utilities {
+	body {
+		@apply bg-root text-neutral font-cairo;
+	}
+	.btn-primary {
+    @apply bg-primary select-none hover:bg-primary-hover active:bg-primary-active transition rounded-full px-8 py-1.5 font-bold
+  }
+  .btn-primary-outline {
+    @apply border-2 border-primary select-none text-primary hover:border-primary-hover active:border-primary-active transition rounded-full px-8 py-1.5 font-bold
+  }
+  .btn-secondary {
+    @apply btn-primary !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active
+  }
+}
