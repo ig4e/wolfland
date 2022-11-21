@@ -27,8 +27,11 @@ module.exports = {
 				cairo: "Cairo, sans-serif",
 			},
 			backgroundImage: {
-				"yellow-tri": "url('/images/bg-yellow-tri.svg')"
-			}
+				"yellow-tri": "url('/images/bg-yellow-tri.svg')",
+			},
+			container: {
+				padding: "1rem",
+			},
 		},
 	},
 	plugins: [],

@@ -8,12 +8,40 @@
 		@apply bg-root text-neutral font-cairo;
 	}
 	.btn-primary {
-    @apply bg-primary select-none hover:bg-primary-hover active:bg-primary-active transition rounded-full px-8 py-1.5 font-bold
-  }
-  .btn-primary-outline {
-    @apply border-2 border-primary select-none text-primary hover:border-primary-hover active:border-primary-active transition rounded-full px-8 py-1.5 font-bold
-  }
-  .btn-secondary {
-    @apply btn-primary !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active
-  }
+		@apply bg-primary select-none hover:bg-primary-hover active:bg-primary-active transition rounded-full px-8 py-1.5 font-bold;
+	}
+	.btn-primary-outline {
+		@apply border-2 border-primary select-none text-primary hover:border-primary-hover active:border-primary-active hover:text-primary-hover active:text-primary-active transition rounded-full px-8 py-1.5 font-bold;
+	}
+
+	.btn-secondary {
+		@apply btn-primary !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active;
+	}
+	.btn-secondary-outline {
+		@apply border-2 border-secondary select-none text-secondary hover:border-secondary-hover active:border-secondary-active hover:text-secondary-hover active:text-secondary-active transition rounded-full px-8 py-1.5 font-bold;
+	}
+
+	.bg-tri-y-clip::before {
+		@apply bg-gradient-to-r from-primary to-root bg-cover bg-no-repeat -z-10;
+	}
+
+	.bg-tri-y-clip::before {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%);
+	}
+
+	.bg-tri-r-clip::before {
+		@apply bg-gradient-to-r from-secondary to-root bg-cover bg-no-repeat -z-10;
+	}
+
+	.bg-tri-r-clip::before {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 89%;
+		clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 50%);
+	}
 }
