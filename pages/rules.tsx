@@ -369,7 +369,7 @@ function Rules() {
 								<div className="flex flex-col items-start gap-6">
 									<div className="flex gap-4 md:gap-6 items-center">
 										<Image
-										className="w-32 h-32 md:w-48 md:h-48"
+											className="w-32 h-32 md:w-48 md:h-48"
 											src={ruleSection.logo}
 											alt={ruleSection.title}
 											width={192}
