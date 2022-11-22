@@ -1,8 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
 import LayoutNoContainer from "../components/Layouts/LayoutNoContainer";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
-import { PhoneArrowDownLeftIcon } from "@heroicons/react/24/outline";
+import {
+	BoltIcon,
+	QuestionMarkCircleIcon,
+	PhoneArrowDownLeftIcon,
+	ShieldCheckIcon,
+} from "@heroicons/react/24/solid";
 
 import WorldImage from "../public/images/world.png";
 import Logo from "../public/images/logo.svg";
@@ -20,22 +24,22 @@ export default function Home() {
 			Icon: PhoneArrowDownLeftIcon,
 		},
 		{
-			title: `الدعم الفنى`,
+			title: `الحماية`,
 			desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى
 			المقروء لصفحة ما سيلهي القارئ عن التركيز على
 			الشكل الخارجي للنص أو شكل توضع الفقرات في
 			الصفحة التي يقرأها. ولذلك يتم استخدام طريقة
 			لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ.`,
-			Icon: PhoneArrowDownLeftIcon,
+			Icon: ShieldCheckIcon,
 		},
 		{
-			title: `الدعم الفنى`,
+			title: `السرعة`,
 			desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى
 					المقروء لصفحة ما سيلهي القارئ عن التركيز على
 					الشكل الخارجي للنص أو شكل توضع الفقرات في
 					الصفحة التي يقرأها. ولذلك يتم استخدام طريقة
 					لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ.`,
-			Icon: PhoneArrowDownLeftIcon,
+			Icon: BoltIcon,
 		},
 	];
 
@@ -110,7 +114,7 @@ export default function Home() {
 							>
 								<div className="flex gap-4">
 									<div className="h-full bg-root-200 p-4 rounded-md flex justify-center items-center">
-										<Icon className="h-20 w-20"></Icon>
+										<Icon className="h-20 w-20 text-primary"></Icon>
 									</div>
 									<div className="flex flex-col gap-2 h-full items-start">
 										<h3 className="text-primary font-bold text-xl">
