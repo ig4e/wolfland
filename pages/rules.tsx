@@ -4,6 +4,7 @@ import LayoutNoContainer from "../components/Layouts/LayoutNoContainer";
 import wezaraDahelya from "../public/images/wezara-dahelya.webp";
 import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import Head from "next/head";
 
 function Rules() {
 	const rulesData = [
@@ -328,6 +329,14 @@ function Rules() {
 	return (
 		<LayoutNoContainer>
 			<main className="space-y-16 !mb-16">
+				<Head>
+					<title>Wolfland - قوانين ولف لاند</title>
+					<meta
+						name="description"
+						content="Wolfland - عالم الخيال والابداع فى الرول بلاى"
+					/>
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
 				<header className="bg-gradient-to-r from-primary to-root py-10">
 					<div className="flex flex-col items-start gap-4 container mx-auto">
 						<h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
