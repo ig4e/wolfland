@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
+import { HomeIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -19,7 +19,17 @@ function Navbar() {
 						<h1 className="text-xl font-bold">ولف لاند</h1>
 					</Link>
 					<div className="flex items-center gap-4">
-						<Link href={"/rules"} className="hover:text-white/80 active:text-white/60 flex items-center gap-2 transition">
+						<Link
+							href={"/"}
+							className="hover:text-white/80 active:text-white/60 items-center gap-2 transition hidden md:flex"
+						>
+							<HomeIcon className="h-5 w-5"></HomeIcon>
+							<span>الرئيسية</span>
+						</Link>
+						<Link
+							href={"/rules"}
+							className="hover:text-white/80 active:text-white/60 flex items-center gap-2 transition"
+						>
 							<QuestionMarkCircleIcon className="h-5 w-5"></QuestionMarkCircleIcon>
 							<span>القوانين</span>
 						</Link>
