@@ -104,7 +104,10 @@ export default function Home() {
 				<section className="flex flex-col lg:flex-row md:items-center gap-4 justify-between container mx-auto my-6">
 					{cardsData.map(({ title, desc, Icon }) => {
 						return (
-							<div className="flex h-full p-4 bg-root-100 rounded-md">
+							<div
+								key={title}
+								className="flex h-full p-4 bg-root-100 rounded-md"
+							>
 								<div className="flex gap-4">
 									<div className="h-full bg-root-200 p-4 rounded-md flex justify-center items-center">
 										<Icon className="h-20 w-20"></Icon>
@@ -166,7 +169,10 @@ export default function Home() {
 					<div className="flex flex-col lg:flex-row md:items-center gap-4 justify-between container mx-auto">
 						{statsData.map(({ title, value, Icon }) => {
 							return (
-								<div className="flex h-full p-4 bg-root-100 rounded-md w-full">
+								<div
+									key={title}
+									className="flex h-full p-4 bg-root-100 rounded-md w-full"
+								>
 									<div className="flex gap-4">
 										<div className="h-full bg-root-200 p-4 rounded-md flex justify-center items-center">
 											<Icon className="h-10 w-10"></Icon>
