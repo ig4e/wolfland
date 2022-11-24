@@ -75,7 +75,7 @@ export default function Home() {
 						></Image>
 						<div className="flex flex-col items-start gap-4">
 							<h1 className="text-4xl md:text-5xl lg:text-7xl font-bold">
-								سيرفر ولف لاند
+								سيرفر وولف لاند
 							</h1>
 							<p className="text-neutral-100 max-w-2xl">
 								اهلاً بك عزيزي في سيرفر وعالم وولف لاند، السيرفر
@@ -90,7 +90,7 @@ export default function Home() {
 								</Link>
 								<Link
 									href="/rules"
-									className="btn-primary-outline !px-6 flex items-center gap-2"
+									className="btn-primary-outline md:!px-6 flex items-center gap-2"
 								>
 									<QuestionMarkCircleIcon className="h-5 w-5"></QuestionMarkCircleIcon>
 									<span>القوانين</span>
@@ -127,7 +127,7 @@ export default function Home() {
 					<header className="py-24 container mx-auto flex flex-col-reverse gap-6 justify-center md:flex-row items-center md:justify-between">
 						<div className="flex h-full gap-6 flex-col items-center text-center md:text-right md:items-start">
 							<h1 className="text-4xl md:text-5xl lg:text-7xl font-bold ">
-								عالم ولف لاند
+								عالم وولف لاند
 							</h1>
 							<p className="text-neutral-100 max-w-2xl">
 								هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى
@@ -143,7 +143,7 @@ export default function Home() {
 								</Link>
 								<Link
 									href="/rules"
-									className="btn-secondary-outline !px-6 flex items-center gap-2"
+									className="btn-secondary-outline md:!px-6 flex items-center gap-2"
 								>
 									<QuestionMarkCircleIcon className="h-5 w-5"></QuestionMarkCircleIcon>
 									<span>القوانين</span>

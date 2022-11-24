@@ -25,7 +25,7 @@ function Navbar() {
 							alt="brand logo"
 							className="w-10 h-10"
 						></Image>
-						<h1 className="text-xl font-bold">ولف لاند</h1>
+						<h1 className="text-xl font-bold">وولف لاند</h1>
 					</Link>
 					<div className="hidden items-center gap-4 md:flex">
 						<Link
@@ -49,7 +49,7 @@ function Navbar() {
 
 					<button
 						onClick={() => setNavMenuOpen(!navMenuOpen)}
-						className="flex items-center justify-center p-1 hover:bg-root-100 active:bg-root-200 rounded-md hover:-rotate-1 transition md:hidden"
+						className="flex items-center justify-center p-1 hover:bg-root-100 active:bg-root-200 rounded-md transition md:hidden"
 					>
 						<Bars3Icon className="w-6 h-6 "></Bars3Icon>
 					</button>
@@ -62,7 +62,11 @@ function Navbar() {
 					<motion.div
 						initial={{ bottom: 0, opacity: 0 }}
 						animate={{ top: 0, opacity: 1 }}
-						exit={{ bottom: 0, top: 900, opacity: 0 }}
+						exit={{
+							bottom: 0,
+							top: typeof window ? window.innerHeight : 900,
+							opacity: 0,
+						}}
 						transition={{
 							type: "spring",
 							damping: 15,
