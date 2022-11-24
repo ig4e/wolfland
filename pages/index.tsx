@@ -189,6 +189,8 @@ export default function Home() {
 						})}
 					</div>
 				</section>
+
+				<section className="container mx-auto">تواصل معنا</section>
 			</main>
 		</LayoutNoContainer>
 	);
