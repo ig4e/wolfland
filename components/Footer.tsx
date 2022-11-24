@@ -16,11 +16,11 @@ function Footer() {
 							target={"_blank"}
 							rel={"noreferrer"}
 							href={"https://discord.gg/wol"}
-							className="bg-[#5865F2] p-2 px-6 rounded-full flex items-center gap-2"
+							className="bg-[#5865F2] p-2 px-4 md:px-6 rounded-full flex items-center gap-2"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								className="w-8 h-8 text-white"
+								className="w-6 h-6 md:w-8 md:h-8 text-white"
 								viewBox="0 0 60 46"
 							>
 								<defs>
@@ -36,7 +36,7 @@ function Footer() {
 								</defs>
 								<g
 									id="discord-mark-white"
-									clip-path="url(#clip-path)"
+									clipPath="url(#clip-path)"
 								>
 									<path
 										id="Path_13"
@@ -48,7 +48,7 @@ function Footer() {
 								</g>
 							</svg>
 
-							<span className="font-semibold text-lg">
+							<span className="font-semibold md:text-lg">
 								ديسكورد
 							</span>
 						</a>
@@ -58,11 +58,11 @@ function Footer() {
 							href={
 								"https://youtube.com/channel/UCALiEPxic7NElSYOwh6WXYA"
 							}
-							className="bg-red-600 p-2 px-6 rounded-full flex items-center gap-2"
+							className="bg-red-600 p-2 px-4 md:px-6 rounded-full flex items-center gap-2"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								className="w-8 h-8"
+								className="w-6 h-6 md:w-8 md:h-8"
 								viewBox="0 0 60 42.002"
 							>
 								<g
