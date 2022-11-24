@@ -117,6 +117,7 @@ function Footer() {
 					<div className="flex items-center gap-4 flex-wrap">
 						{soicals.map((social) => (
 							<a
+								key={social.name}
 								target={"_blank"}
 								rel={"noreferrer"}
 								href={social.url}
