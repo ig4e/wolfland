@@ -1,10 +1,12 @@
 import React from "react";
-import * as Accordion from "@radix-ui/react-accordion";
 import LayoutNoContainer from "../components/Layouts/LayoutNoContainer";
 import wezaraDahelya from "../public/images/wezara-dahelya.webp";
 import Image from "next/image";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import Head from "next/head";
+
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import * as Accordion from "@radix-ui/react-accordion";
+
 
 function Rules() {
 	const rulesData = [
