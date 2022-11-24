@@ -121,7 +121,7 @@ function Footer() {
 								target={"_blank"}
 								rel={"noreferrer"}
 								href={social.url}
-								className={`p-2 px-4 md:px-6 rounded-full flex items-center gap-2`}
+								className={`p-2 px-4 md:px-6 rounded-full flex items-center gap-2 select-none`}
 								style={{ backgroundColor: social.color }}
 							>
 								{social.icon}
