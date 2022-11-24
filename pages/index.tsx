@@ -238,7 +238,7 @@ export default function Home() {
 										className="overflow-hidden"
 									>
 										<Accordion.Header className="bg-root-100 rounded-md">
-											<Accordion.Trigger className="AccordionTrigger flex items-center justify-between w-full py-2 px-4 bg-root-100 hover:bg-root-200/25 rounded-t-md">
+											<Accordion.Trigger className="AccordionTrigger flex items-center justify-between w-full py-2 px-4 bg-root-100 hover:bg-root-200/25 rounded-md">
 												<span>{title}</span>
 												<ChevronDownIcon className="AccordionChevron h-5 w-5"></ChevronDownIcon>
 											</Accordion.Trigger>

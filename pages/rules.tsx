@@ -6,12 +6,16 @@ import Head from "next/head";
 
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import * as Accordion from "@radix-ui/react-accordion";
-
+import Link from "next/link";
 
 function Rules() {
 	const rulesData = [
 		{
 			title: "القوانين العامة",
+			desc: `القوانين العامة تعتبر هي قوانين الرول بلاي والتى يجب
+			على الجميع قرائتها والتأكد من حظفها وفهمها بالكامل
+			وبعدها يمكنك ان تقوم بالتقدم للأختبار والتعرف على
+			التفعيل في وولف لاند`,
 			logo: wezaraDahelya,
 			rules: [
 				{
@@ -156,9 +160,11 @@ function Rules() {
 				},
 			],
 			apply: true,
+			applyUrl: `/apply`,
 		},
 		{
 			title: "قوانين الشرطة",
+			desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها.`,
 			logo: wezaraDahelya,
 			rules: [
 				{
@@ -207,6 +213,7 @@ function Rules() {
 		},
 		{
 			title: "قوانين العدل",
+			desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها.`,
 			logo: wezaraDahelya,
 			rules: [
 				{
@@ -243,28 +250,14 @@ function Rules() {
 		},
 		{
 			title: "قوانين الاسعاف",
+			desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها.`,
 			logo: wezaraDahelya,
 			rules: [
 				{
 					header: "قوانين المستشفي للمواطنين",
 					content: `– لاتتواجد بالمستشفى اذا ماكان عندك سبب – لاتركض بالمستشفى – من المهم الحفاظ على الامان في المستشفى لذلك في حال تسببت باطلاق نار او تعدي على اي شخص بالمستشفى سيتم حظرك من دخول المستشفى بوثيقة رسمية من المحكمة (وتنسجن في حال رجعت ويتم رفض اي علاج لك)`,
 				},
-				{
-					header: "تعريف وزارة العدل",
-					content: `وزارة العدل تهتم بشؤون عديدة و منها.
-					العدل بين الناس و اعطاء كل ذي حق حقه
-					استلام شكوى المواطنين من المحامين و اعلان بها قضية اذا استحقت
-					ترتيب الجلسات القضائية و اعلانها و الحكم فيها
-					مسؤولة عن المزادات في المدينة
-					الافراج عن المساجين بعد الاستحقاق
-					تمويل المنشات الصغيرة بعد الاستحقاق
-					اصدار رخصة المحاماه
-					اصدار سجلات التجارية
-					اصدار عقود الزواج
-					اصدار صكوك الاعفاء
-					اصدار ورقه حمل سلاح
-					اصدار صكوك ملكية للبيوت`,
-				},
+
 				{
 					header: "تنبيهات المستشفي",
 					content: `– لن يتم علاجك في حال كنت لا تحترم وتتعاون مع المسعفين – نقلك لاشخاص مسقطين يعرضك للتحقيق مع الشرطة لمعرفة تفاصيل الحادثة لذلك يفضل دائما طلب مسعف للموقع لينقل المسقطين بأمان – لاتطلب مسعف اذا كنت في سياره متحركة ويتغير مكانك كل شوي – يرجى عدم تكرار الاتصالات ولاتستعمل رقم الشرطة لطلب مسعف – احرص على حمل الهوية دائما ليتم معرفتك وتسجيلك بالنظام وعلاجك وصرف الادوية لك`,
@@ -306,6 +299,7 @@ function Rules() {
 		},
 		{
 			title: "قوانين الرقابة",
+			desc: `الرقابة هي إدارة معنية بمتابعة مجريات الأحداث ومتابعة مخالفات النظام العام في السيرفر، حيث أن رجل الرقابة يهتم بتقييم السيناريوهات والأحداث العامة ومعاقبة أي شخص يخالف النظام العام والعمل على القبض على المخربيين والمخادعين والمتعدين على الرول من اى اتجاه وهذا ما يجعل الرقابة هي الأدارة الوحيده التى لديها الحق فى التدخل فى اى مشكلة بين اللاعبين او اى تعدي قائم من طرف الى اخر.`,
 			logo: wezaraDahelya,
 			rules: [
 				{
@@ -353,7 +347,7 @@ function Rules() {
 				</header>
 
 				<div className="container mx-auto space-y-8">
-					<div className="flex flex-col justify-center items-center text-center gap-4 ">
+					<div className="flex flex-col justify-center items-center text-center gap-4 hidden">
 						<div className="text-4xl md:text-5xl lg:text-5xl font-bold flex gap-4 items-center">
 							<Image
 								className=""
@@ -375,7 +369,10 @@ function Rules() {
 					{rulesData.map((ruleSection, index) => {
 						return (
 							<div key={ruleSection.title} className="space-y-8">
-								<div className="border-2 rounded-full border-root-200 w-full"></div>
+								<div
+									className="border-2 rounded-full border-root-200 w-full"
+									hidden={index === 0}
+								></div>
 
 								<div className="flex flex-col items-start gap-6">
 									<div className="flex gap-4 md:gap-6 items-center">
@@ -390,12 +387,20 @@ function Rules() {
 											<h1 className="font-bold text-3xl md:text-4xl">
 												{ruleSection.title}
 											</h1>
-											<button
-												className="btn-primary"
-												hidden={!ruleSection.apply}
-											>
-												التقديم الاليكترونى
-											</button>
+											<p className="text-neutral-100 hidden md:block">
+												{ruleSection.desc}
+											</p>
+											{ruleSection.apply &&
+												ruleSection.applyUrl && (
+													<Link
+														href={
+															ruleSection.applyUrl
+														}
+														className="btn-primary"
+													>
+														التقديم الاليكترونى
+													</Link>
+												)}
 										</div>
 									</div>
 
@@ -403,11 +408,6 @@ function Rules() {
 										type="single"
 										className="bg-root-100 rounded-md w-full"
 										collapsible={true}
-										defaultValue={
-											index === 0
-												? ruleSection.rules[0].header
-												: undefined
-										}
 									>
 										{ruleSection.rules.map(
 											({ content, header }) => {
@@ -418,7 +418,7 @@ function Rules() {
 														className="overflow-hidden"
 													>
 														<Accordion.Header className="bg-root-100 rounded-md">
-															<Accordion.Trigger className="AccordionTrigger flex items-center justify-between w-full py-2 px-4 bg-root-100 hover:bg-root-200/25 rounded-t-md">
+															<Accordion.Trigger className="AccordionTrigger flex items-center justify-between w-full py-2 px-4 bg-root-100 hover:bg-root-200/25 rounded-md">
 																<span>
 																	{header}
 																</span>
