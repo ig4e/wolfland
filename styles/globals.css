@@ -26,7 +26,9 @@
 		@apply bg-gradient-to-r from-primary to-root bg-cover bg-no-repeat -z-10;
 	}
 
-	
+	.bg-tri-r-clip::before {
+		@apply bg-gradient-to-r from-secondary to-root bg-cover bg-no-repeat -z-10;
+	}
 
 	.bg-tri-y-clip::before {
 		content: "";
@@ -37,15 +39,29 @@
 	}
 
 	.bg-tri-r-clip::before {
-		@apply bg-gradient-to-r from-secondary to-root bg-cover bg-no-repeat -z-10;
-	}
-
-	.bg-tri-r-clip::before {
 		content: "";
 		position: absolute;
 		width: 100%;
 		height: 89%;
 		clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 50%);
+	}
+
+	@media only screen and (max-width: 600px) {
+		.bg-tri-y-clip::before {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
+		}
+
+		.bg-tri-r-clip::before {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 89%;
+			clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 30%);
+		}
 	}
 
 	/* width */
