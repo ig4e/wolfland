@@ -65,7 +65,7 @@ const Home: NextPage<IPageProps> = ({
     },
     {
       title: `عدد اللأعبين اليوم`,
-      value: `${currentOnlineMembers}+`,
+      value: `${currentOnlineActivatedMembers}+`,
       Icon: PhoneArrowDownLeftIcon,
     },
   ];
