@@ -270,57 +270,50 @@ const Home: NextPage<IPageProps> = ({
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=21600, stale-while-revalidate=86400"
-  );
+  if (process.env.NODE_ENV === "development")
+    return {
+      props: {
+        currentMembers: "N/A",
+        currentOnlineMembers: "N/A",
+        currentActivatedMembers: "N/A",
+        currentOnlineActivatedMembers: "N/A",
+        currentLockedMembers: "N/A",
+        currentNotActivatedMembers: "N/A",
+      },
+    };
 
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildPresences,
-    ],
-  });
-  await client
-    .login(process.env.DISCORD_CLIENT_TOKEN)
-    .then(() => console.log("loggedIn"));
-  const guild = await client.guilds.fetch("920413638441967656");
-  const activatedRole = await guild.roles.fetch("1039937716063850526");
-  const notActivatedRole = await guild.roles.fetch("1039937716768481362");
-  const lockedRole = await guild.roles.fetch("1039937739212202024");
-  await guild.members.fetch({ force: true, withPresences: true });
+  try {
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=21600, stale-while-revalidate=86400"
+    );
+    const client = new Client({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+      ],
+    });
+    await client.login(process.env.DISCORD_CLIENT_TOKEN);
+    const guild = await client.guilds.fetch("920413638441967656");
+    const activatedRole = await guild.roles.fetch("1039937716063850526");
+    const notActivatedRole = await guild.roles.fetch("1039937716768481362");
+    const lockedRole = await guild.roles.fetch("1039937739212202024");
+    await guild.members.fetch({ force: true, withPresences: true });
+    const currentMembers = guild.memberCount!;
+    const currentOnlineMembers = guild.approximatePresenceCount!;
+    const currenActivatedMembers = activatedRole?.members.size!;
+    const currentOnlineActivatedMembers = activatedRole?.members.filter(
+      (user) => user.presence?.status !== "offline"
+    ).size!;
+    const currentLockedMembers = lockedRole?.members.size!;
+    const currentNotActivatedMembers = notActivatedRole?.members.size!;
+    
+    client.destroy();
 
-  const currentMembers = guild.memberCount!;
-  const currentOnlineMembers = guild.approximatePresenceCount!;
-  const currenActivatedMembers = activatedRole?.members.size!;
-  const currentOnlineActivatedMembers = activatedRole?.members.filter(
-    (user) => user.presence?.status !== "offline"
-  ).size!;
-  const currentLockedMembers = lockedRole?.members.size!;
-  const currentNotActivatedMembers = notActivatedRole?.members.size!;
+    const formater = new Intl.NumberFormat();
 
-  client.destroy();
-
-  //1039937716063850526 ena
-  //1039937716768481362 nena
-  //1039937739212202024 sgn
-
-  const formater = new Intl.NumberFormat();
-
-  console.log({
-    currentMembers: formater.format(currentMembers),
-    currentOnlineMembers: formater.format(currentOnlineMembers),
-    currentActivatedMembers: formater.format(currenActivatedMembers),
-    currentOnlineActivatedMembers: formater.format(
-      currentOnlineActivatedMembers
-    ),
-    currentLockedMembers: formater.format(currentLockedMembers),
-    currentNotActivatedMembers: formater.format(currentNotActivatedMembers),
-  });
-
-  return {
-    props: {
+    console.log({
       currentMembers: formater.format(currentMembers),
       currentOnlineMembers: formater.format(currentOnlineMembers),
       currentActivatedMembers: formater.format(currenActivatedMembers),
@@ -329,8 +322,32 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       ),
       currentLockedMembers: formater.format(currentLockedMembers),
       currentNotActivatedMembers: formater.format(currentNotActivatedMembers),
-    },
-  };
+    });
+
+    return {
+      props: {
+        currentMembers: formater.format(currentMembers),
+        currentOnlineMembers: formater.format(currentOnlineMembers),
+        currentActivatedMembers: formater.format(currenActivatedMembers),
+        currentOnlineActivatedMembers: formater.format(
+          currentOnlineActivatedMembers
+        ),
+        currentLockedMembers: formater.format(currentLockedMembers),
+        currentNotActivatedMembers: formater.format(currentNotActivatedMembers),
+      },
+    };
+  } catch {
+    return {
+      props: {
+        currentMembers: "N/A",
+        currentOnlineMembers: "N/A",
+        currentActivatedMembers: "N/A",
+        currentOnlineActivatedMembers: "N/A",
+        currentLockedMembers: "N/A",
+        currentNotActivatedMembers: "N/A",
+      },
+    };
+  }
 };
 
 /*
