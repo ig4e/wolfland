@@ -346,7 +346,7 @@ function Rules() {
         </header>
 
         <div className="container mx-auto space-y-8">
-          <div className="flex hidden flex-col items-center justify-center gap-4 text-center">
+          <div className="flex flex-col items-center justify-center gap-4 text-center">
             <div className="flex items-center gap-4 text-4xl font-bold md:text-5xl lg:text-5xl">
               <Image
                 className=""
