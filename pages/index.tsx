@@ -152,17 +152,19 @@ const Home: NextPage<IPageProps> = ({
             );
           })}
         </section>
-        <section className="bg-tri-r-clip relative">
+        <section className="bg-tri-r-clip relative pb-6">
           <header className="container mx-auto flex flex-col-reverse items-center justify-center gap-6 py-24 md:flex-row md:justify-between">
             <div className="flex h-full flex-col items-center gap-6 text-center md:items-start md:text-right">
               <h1 className="text-4xl font-bold md:text-5xl lg:text-7xl ">
                 عالم وولف لاند
               </h1>
               <p className="max-w-2xl text-neutral-100">
-                هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما
-                سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع
-                الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم
-                إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن
+                مرحبا بك في دولة وولف لاند حيث الإثارة والمتعة وحيث الواقعية فب
+                اللعب و واقعية تقمص الشخصيات الذي يعمل في حماية وطنة العزيز
+                وحماية من الفساد والهلاك للدولة والذي يهتم بمهام الإعلام المرئي
+                والمسموع لضمان صدق الحدث و الذي يقوم بعلمه ومحافظًا على سلامة
+                دولة بالمحافظة على ممتلكاتها وعدم تشويه سمعة وطنة والدفاع عنه
+                لأجل وطنة الحبيب، كل وهذه وأكثر في دولة وولف لاند.
               </p>
               <div className="flex items-center gap-4">
                 <Link href="/apply" className="btn-secondary">
@@ -217,7 +219,7 @@ const Home: NextPage<IPageProps> = ({
           </div>
         </section>
 
-        <section className="container mx-auto">
+        <section className="container mx-auto" id="faqs-section">
           <div className="my-20 flex grid-flow-col grid-rows-2 flex-col gap-4 md:grid md:grid-flow-row md:grid-cols-3 md:grid-rows-1">
             <div className="space-y-4">
               <h2 className="text-4xl font-bold md:text-5xl lg:text-5xl ">
@@ -308,7 +310,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     ).size!;
     const currentLockedMembers = lockedRole?.members.size!;
     const currentNotActivatedMembers = notActivatedRole?.members.size!;
-    
+
     client.destroy();
 
     const formater = new Intl.NumberFormat();
