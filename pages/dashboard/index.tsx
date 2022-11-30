@@ -256,7 +256,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
 
                 <Dialog.Portal key={v4()}>
                   <Dialog.Overlay className="fixed inset-0 z-50 grid place-items-center bg-root/50">
-                    <Dialog.Content className="max-h-screen w-full max-w-xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4">
+                    <Dialog.Content className="max-h-screen h-full w-full max-w-xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-xl font-bold">
                           أضف نموذج جديد
@@ -467,7 +467,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                     <Accordion.Header className="rounded-md bg-root-100">
                                       <Accordion.Trigger className="AccordionTrigger flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-right hover:bg-root-200/25">
                                         <span>{title}</span>
-                                        <ChevronDownIcon className="AccordionChevron h-5 w-5 min-h-fit min-w-fit max-h-5 max-w-[1.25rem]"></ChevronDownIcon>
+                                        <ChevronDownIcon className="AccordionChevron h-5 w-5 min-h-[1.25rem] min-w-[1.25rem] max-h-5 max-w-[1.25rem]"></ChevronDownIcon>
                                       </Accordion.Trigger>
                                     </Accordion.Header>
                                     <Accordion.Content className="AccordionContent overflow-hidden bg-root px-4 text-neutral-100">
