@@ -467,7 +467,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                     <Accordion.Header className="rounded-md bg-root-100">
                                       <Accordion.Trigger className="AccordionTrigger flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-right hover:bg-root-200/25">
                                         <span>{title}</span>
-                                        <ChevronDownIcon className="AccordionChevron h-5 min-h-fit w-5 min-w-fit"></ChevronDownIcon>
+                                        <ChevronDownIcon className="AccordionChevron h-5 w-5 min-h-fit min-w-fit max-h-5 max-w-[1.25rem]"></ChevronDownIcon>
                                       </Accordion.Trigger>
                                     </Accordion.Header>
                                     <Accordion.Content className="AccordionContent overflow-hidden bg-root px-4 text-neutral-100">
