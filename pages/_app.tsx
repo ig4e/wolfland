@@ -27,8 +27,6 @@ export default function App({
       .catch((err) => {
         console.log(err);
         setUser(undefined);
-
-        setUserError("يجب ان تكون فى سيرفر الديسكورد")
         setLoading(false);
       });
   }, []);
