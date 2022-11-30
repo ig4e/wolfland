@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useUserStore } from "../store";
 import { signIn, signOut } from "next-auth/react";
+import { UserApplication } from "@prisma/client";
 
 const applyStatus = {
   PENDING: "تحت المراجعة",
@@ -33,7 +34,7 @@ function Navbar() {
     }
   }, [mobileNavOpen]);
 
-  const applyState = applyStatus[user?.userApplyApplication?.status || "PENDING"];
+  const applyState = applyStatus[user?.userApplyApplication?.status as UserApplication["status"] || "PENDING"];
 
   return (
     <nav className="relative h-[55px] md:h-[75px]">
