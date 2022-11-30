@@ -3,67 +3,31 @@ import fetch from "node-fetch";
 import { prisma } from "../../../db";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
+import { Application } from "@prisma/client";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== "POST") return res.status(405).send("Method Not Allowed");
   const session = await unstable_getServerSession(req, res, authOptions);
   if (session && session.user) {
+    const applicationBody = req.body.application as Partial<Application>;
+
+    if (
+      !applicationBody.for ||
+      applicationBody.additionalUserInfoRequired === null ||
+      (applicationBody.questions?.length || 0) < 1
+    )
+      return res.status(400).json({ success: false, error: "Invaild application" });
+
     const application = await prisma.application.create({
       data: {
-        for: "ACTIVATE",
-        additionalUserInfoRequired: true,
+        for: applicationBody.for,
+        additionalUserInfoRequired: applicationBody.additionalUserInfoRequired,
         hidden: false,
-        quetions: [
-          { title: "من هو بطل فايوليت ايفر جاردن" },
-          { title: "من هو صديق فايوليت" },
-          { title: "كم عدد الانميات التى شاهدتها" },
-          { title: "هل فايوليت ايفر جاردن افضل انمى؟ مع التفسير" },
-        ],
+        questions: applicationBody.questions,
       },
     });
 
-    const application2 = await prisma.application.create({
-      data: {
-        for: "ACTIVATE",
-        additionalUserInfoRequired: true,
-        hidden: false,
-        quetions: [
-          { title: "من هو بطل شين ساو مان" },
-          { title: "من هو صديق باور" },
-          { title: "كم عدد الانميات التى شاهدتها" },
-          { title: "هل شين ساو مان افضل انمى؟ مع التفسير" },
-        ],
-      },
-    });
-
-    const application3 = await prisma.application.create({
-      data: {
-        for: "ACTIVATE",
-        additionalUserInfoRequired: true,
-        hidden: false,
-        quetions: [
-          { title: "من هو بطل ونبيس" },
-          { title: "من هو صديق لوفى" },
-          { title: "كم عدد الانميات التى شاهدتها" },
-          { title: "هل ونبيس افضل انمى؟ مع التفسير" },
-        ],
-      },
-    });
-
-    const applicatio4 = await prisma.application.create({
-      data: {
-        for: "ACTIVATE",
-        additionalUserInfoRequired: true,
-        hidden: false,
-        quetions: [
-          { title: "من هو بطل شرق عدن" },
-          { title: "من هي صديقة اكاريا" },
-          { title: "كم عدد الانميات التى شاهدتها" },
-          { title: "هل شرق عدن افضل انمى؟ مع التفسير" },
-        ],
-      },
-    });
-
-    res.json({ application, application2, application3, applicatio4 });
+    res.json(application);
   } else {
     res.status(401).send({
       success: false,

@@ -22,11 +22,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const guildId = process.env.DISCORD_GUILD_ID!;
-
     const activatedRoleId = process.env.DISCORD_GUILD_ACTIVAITED_ROLE_ID!;
     const unActivatedRoleId = process.env.DISCORD_GUILD_UNACTIVAITED_ROLE_ID!;
 
-    /*if (newStatus === "ACCEPTED") {
+    if (newStatus === "ACCEPTED") {
       await fetch(
         `https://discord.com/api/v10/guilds/${guildId}/members/${userApplication.user.discordID}/roles/${activatedRoleId}`,
         {
@@ -66,7 +65,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           },
         }
       );
-    }*/
+    }
 
     res.json(userApplication);
   } else {

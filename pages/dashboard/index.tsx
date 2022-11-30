@@ -22,6 +22,8 @@ import axios from "axios";
 import * as Dialog from "@radix-ui/react-dialog";
 import { v4 } from "uuid";
 
+import { useForm } from "react-hook-form";
+
 interface DiscordUser {
   id: string;
   username: string;
@@ -49,6 +51,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
 }) => {
   const { user, loading } = useUserStore();
   const router = useRouter();
+  const [newApplicationModalOpen, setNewApplicationModalOpen] = useState(false);
 
   const {
     application: newApplication,
@@ -72,7 +75,9 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     (a) => a.status === "REFUSED"
   );
 
-  /*if (loading)
+  const { handleSubmit, register } = useForm();
+
+  if (loading)
     return (
       <Layout>
         <div>جارى التحميل...</div>
@@ -91,7 +96,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
         </div>
       </Layout>
     );
-  }*/
+  }
 
   async function deleteApplication(id: string) {
     setDisplayedApplications((state) =>
@@ -118,6 +123,35 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
       url: `/api/application/editUserApplication?applicationId=${id}&status=${newStatus}`,
       withCredentials: true,
     });
+  }
+
+  async function onSubmit(d: any) {
+    const keys = Object.keys(d);
+    const result: Partial<Application> = { ...newApplication, questions: [] };
+    keys.map((key) => {
+      const [_, id] = key.split("quetion-");
+      const value = d[key];
+      if (value) {
+        result.questions?.push({ id, title: value, response: null });
+      }
+    });
+
+    setNewApplicationModalOpen(false);
+
+    try {
+      const { data } = await axios({
+        url: "/api/application/create",
+        method: "POST",
+        data: {
+          application: result,
+        },
+      });
+      setDisplayedApplications((state) => [...state, data]);
+    } catch (err) {
+      console.log(err);
+    }
+
+    console.log(result);
   }
 
   return (
@@ -179,7 +213,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                     <div className="space-y-2">
                       <h1 className="font-bold">الأسئلة : </h1>
                       <div className="flex flex-col gap-1">
-                        {application.quetions.map((quetion, index) => {
+                        {application.questions.map((quetion, index) => {
                           return (
                             <div key={quetion.id}>
                               <h3 className="flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-sm">
@@ -202,7 +236,10 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                 );
               })}
 
-              <Dialog.Root>
+              <Dialog.Root
+                open={newApplicationModalOpen}
+                onOpenChange={setNewApplicationModalOpen}
+              >
                 <Dialog.Trigger asChild>
                   <button
                     key={"new-application"}
@@ -217,9 +254,9 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                   </button>
                 </Dialog.Trigger>
 
-                <Dialog.Portal key={v4()} id={v4()}>
+                <Dialog.Portal key={v4()}>
                   <Dialog.Overlay className="fixed inset-0 z-50 grid place-items-center bg-root/50">
-                    <Dialog.Content className="w-full max-w-xl space-y-4 rounded-md bg-root-100 p-4">
+                    <Dialog.Content className="max-h-screen w-full max-w-xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-xl font-bold">
                           أضف نموذج جديد
@@ -231,25 +268,29 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
 
                       <div className="space-y-2">
                         <h1 className="text-lg font-semibold">
-                          ({newApplication.quetions?.length}) الاسئلة
+                          ({newApplication.questions?.length}) الاسئلة
                         </h1>
-                        <div className="flex flex-col gap-4">
-                          {newApplication.quetions?.map((quetion, index) => {
+                        <form
+                          className="flex flex-col gap-4"
+                          onSubmit={handleSubmit(onSubmit)}
+                        >
+                          {newApplication.questions?.map((quetion, index) => {
                             return (
                               <div key={quetion.id} className="space-y-2">
-                                <span className="text-sm">س{index + 1}</span>
+                                <span className="text-xs">س{index + 1}</span>
                                 <div className="flex items-center gap-4">
                                   <input
-                                    onChange={(e) =>
-                                      updateQuestionTitle(
-                                        quetion.id,
-                                        e.target.value
-                                      )
-                                    }
+                                    {...register(`quetion-${quetion.id}`)}
                                     type={"text"}
                                     className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
                                   ></input>
-                                  <button disabled={index === 0} onClick={() => deleteQuestionTitle(quetion.id)} className="bg-secondary disabled:bg-secondary/50 p-2 rounded flex justify-center">
+                                  <button
+                                    disabled={index === 0}
+                                    onClick={() =>
+                                      deleteQuestionTitle(quetion.id)
+                                    }
+                                    className="flex justify-center rounded bg-secondary p-2 disabled:bg-secondary/50"
+                                  >
                                     <TrashIcon className="h-5 w-5"></TrashIcon>
                                   </button>
                                 </div>
@@ -264,7 +305,13 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                             <PlusIcon className="h-5 w-5"></PlusIcon>
                             <span>أضف سؤالا جديدا</span>
                           </button>
-                        </div>
+
+                          <input
+                            className="flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                            type={"submit"}
+                            value={"أضف النموذج"}
+                          />
+                        </form>
                       </div>
                     </Dialog.Content>
                   </Dialog.Overlay>
@@ -404,10 +451,10 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                             className="w-full rounded-md bg-root-200 md:col-span-2"
                             collapsible={true}
                           >
-                            {userApplication.application.quetions.map(
+                            {userApplication.application.questions.map(
                               ({ title, id }) => {
                                 const userQuetioneWithResponse =
-                                  userApplication.quetions.find(
+                                  userApplication.questions.find(
                                     (q) => q.id === id
                                   )!;
 

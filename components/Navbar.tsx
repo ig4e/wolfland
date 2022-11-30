@@ -24,7 +24,7 @@ function LoadingSpinner() {
 function Navbar() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, loading } = useUserStore();
+  const { user, loading, error } = useUserStore();
 
   useEffect(() => {
     const body = typeof window && document.getElementById("root");
@@ -151,8 +151,12 @@ function Navbar() {
             ) : loading ? (
               <LoadingSpinner />
             ) : (
-              <button onClick={() => signIn("discord")} className="btn-primary">
-                <span>تسجيل الدخول</span>
+              <button
+                disabled={!!error}
+                onClick={() => signIn("discord")}
+                className="btn-primary"
+              >
+                <span>{error ? error : "تسجيل الدخول"}</span>
               </button>
             )}
           </div>
@@ -196,7 +200,7 @@ function Navbar() {
                 damping: 15,
                 duration: 0.1,
               }}
-              className="container fixed inset-x-0 z-40 mx-auto flex flex-col items-center justify-between gap-4 bg-root/95 backdrop-blur-lg md:hidden"
+              className="container fixed inset-x-0 z-[35] mx-auto flex flex-col items-center justify-between gap-4 bg-root/95 backdrop-blur-lg md:hidden"
             >
               <div className="flex w-full flex-col items-center gap-4">
                 <div className="h-[55px] md:h-[75px]"></div>
@@ -219,15 +223,24 @@ function Navbar() {
               </div>
 
               <div className="mb-4 flex w-full flex-col  gap-4">
-                {!user?.activated && !user?.locked && (
-                  <Link
-                    onClick={() => setMobileNavOpen(!mobileNavOpen)}
-                    href={"/apply"}
-                    className="btn-primary w-full place-self-end self-end text-center"
-                  >
-                    <span>أنضم لنا</span>
-                  </Link>
-                )}
+                {!user?.activated &&
+                  !user?.locked &&
+                  (user?.userApplyApplication ? (
+                    <div className="flex select-none items-center justify-center gap-1 py-1">
+                      <span className="font-bold">حالة تقديمك : </span>
+                      <span>
+                        {applyStatus[user.userApplyApplication.status]}
+                      </span>
+                    </div>
+                  ) : (
+                    <Link
+                      onClick={() => setMobileNavOpen(!mobileNavOpen)}
+                      href={"/apply"}
+                      className="btn-primary w-full place-self-end self-end text-center"
+                    >
+                      <span>أنضم لنا</span>
+                    </Link>
+                  ))}
 
                 {user?.admin && (
                   <Link

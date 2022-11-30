@@ -25,15 +25,18 @@ interface User {
 interface UserState {
   loading: boolean;
   user?: Partial<User>;
+  error?: string;
   setLoading: (loading: boolean) => void;
   setUser: (newUser?: User) => void;
   signOut: () => void;
+  setUserError: (err: string) => void;
 }
 
 export const useUserStore = create<UserState>()(
   devtools((set) => ({
     loading: true,
     user: undefined,
+    error: "",
     setLoading(loading) {
       set((state) => {
         return { ...state, loading: loading };
@@ -50,6 +53,9 @@ export const useUserStore = create<UserState>()(
       });
       signOut();
     },
+    setUserError(err) {
+      set((state) => ({ ...state, error: err }));
+    },
   }))
 );
 
@@ -63,7 +69,7 @@ interface NewApplicationState {
 export const useNewApplicationStore = create<NewApplicationState>()(
   devtools((set) => ({
     application: {
-      quetions: [{ id: v4(), title: "", response: null }],
+      questions: [{ id: v4(), title: "", response: null }],
       for: "ACTIVATE",
       additionalUserInfoRequired: true,
     },
@@ -73,7 +79,7 @@ export const useNewApplicationStore = create<NewApplicationState>()(
           ...state,
           application: {
             ...state.application,
-            quetions: state.application.quetions?.map((q) => {
+            questions: state.application.questions?.map((q) => {
               if (q.id === id) q.title = value;
               return q;
             }),
@@ -87,8 +93,8 @@ export const useNewApplicationStore = create<NewApplicationState>()(
           ...state,
           application: {
             ...state.application,
-            quetions: [
-              ...state.application.quetions!,
+            questions: [
+              ...state.application.questions!,
               { id: v4(), title: "", response: null },
             ],
           },
@@ -101,7 +107,7 @@ export const useNewApplicationStore = create<NewApplicationState>()(
           ...state,
           application: {
             ...state.application,
-            quetions: state.application.quetions?.filter((q) => q.id !== id),
+            quetions: state.application.questions?.filter((q) => q.id !== id),
           },
         };
       });

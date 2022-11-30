@@ -14,7 +14,7 @@ model Application {
   id                         String            @id @default(uuid()) @map("_id")
   hidden                     Boolean           @default(false)
   for                        ApplicationTypes  @default(ACTIVATE)
-  quetions                   Question[]
+  questions                  Question[]
   UserApplications           UserApplication[]
   additionalUserInfoRequired Boolean           @default(true)
   updatedAt                  DateTime          @updatedAt
@@ -39,7 +39,7 @@ model UserApplication {
   id                 String                @id @default(uuid()) @map("_id")
   user               User                  @relation(fields: [userId], references: [id])
   application        Application           @relation(fields: [ApplicationId], references: [id])
-  quetions           Question[]
+  questions          Question[]
   status             UserApplicationStatus @default(PENDING)
   additionalUserInfo AdditionalUserInfo?
   userId             String

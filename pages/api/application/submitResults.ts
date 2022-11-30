@@ -27,10 +27,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     if (!user || !application)
-      return res.json({ success: false, error: "Invaild applicationId" });
+      return res.status(400).json({ success: false, error: "رقم تعريف النموذج خاطئ" });
 
     if (application.hidden)
-      return res.json({ success: false, error: "Invaild application" });
+      return res.status(400).json({ success: false, error: "نموذج خاطئ" });
 
     if (
       user?.applications.some(
@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             userApplication.status === "PENDING")
       )
     )
-      return res.json({ success: false, error: "You Have Already Applied" });
+      return res.status(400).json({ success: false, error: "لقد قدمت بالفعل" });
 
     const quetionsWithResponse: Question[] = req.body?.quetions;
     const additionalUserInfo: AdditionalUserInfo = req.body?.additionalUserInfo;
@@ -50,10 +50,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       quetionsWithResponse.some(
         (question) =>
           !question.response ||
-          !application?.quetions.some((aq) => aq.id === question.id)
+          !application?.questions.some((aq) => aq.id === question.id)
       )
     )
-      return res.json({ success: false, error: "Invaild Body / Questions" });
+      return res.status(400).json({ success: false, error: "أجابات الاسئلة او الاسئلة بها خطاء" });
 
     if (
       (application.additionalUserInfoRequired && !additionalUserInfo) ||
@@ -61,9 +61,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       !additionalUserInfo.name ||
       !additionalUserInfo.sonyAccountName
     )
-      return res.json({
+      return res.status(400).json({
         success: false,
-        error: "Invaild Body / AdditionalUserInfo",
+        error: "معلوماتك خاطئة",
       });
 
     const userApplication = await prisma.userApplication.create({
@@ -78,7 +78,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             id: user.id,
           },
         },
-        quetions: quetionsWithResponse,
+        questions: quetionsWithResponse,
         additionalUserInfo:
           (additionalUserInfo && {
             age: Number(additionalUserInfo.age),

@@ -9,6 +9,7 @@ export default function App({
   Component,
   pageProps: { session: sessionProps, ...pageProps },
 }: AppProps) {
+  const setUserError = useUserStore((state) => state.setUserError);
   const setUser = useUserStore((state) => state.setUser);
   const setLoading = useUserStore((state) => state.setLoading);
 
@@ -26,6 +27,8 @@ export default function App({
       .catch((err) => {
         console.log(err);
         setUser(undefined);
+
+        setUserError("يجب ان تكون فى سيرفر الديسكورد")
         setLoading(false);
       });
   }, []);
