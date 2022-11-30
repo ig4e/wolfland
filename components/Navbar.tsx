@@ -33,6 +33,8 @@ function Navbar() {
     }
   }, [mobileNavOpen]);
 
+  const applyState = applyStatus[user?.userApplyApplication?.status || "PENDING"];
+
   return (
     <nav className="relative h-[55px] md:h-[75px]">
       <div className="fixed inset-x-0 top-0 z-40 flex h-[55px] items-center justify-center bg-root opacity-90 backdrop-blur-lg md:h-[75px]">
@@ -91,13 +93,7 @@ function Navbar() {
                             !user?.locked &&
                             (user.userApplyApplication ? (
                               <div className="flex select-none items-center justify-end gap-1 py-1">
-                                <span>
-                                  {
-                                    applyStatus[
-                                      user.userApplyApplication.status
-                                    ]
-                                  }
-                                </span>
+                                <span>{applyState}</span>
                                 <span className="font-bold">: حالة تقديمك</span>
                               </div>
                             ) : (
@@ -228,9 +224,7 @@ function Navbar() {
                   (user?.userApplyApplication ? (
                     <div className="flex select-none items-center justify-center gap-1 py-1">
                       <span className="font-bold">حالة تقديمك : </span>
-                      <span>
-                        {applyStatus[user.userApplyApplication.status]}
-                      </span>
+                      <span>{applyState}</span>
                     </div>
                   ) : (
                     <Link
