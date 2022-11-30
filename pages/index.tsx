@@ -297,10 +297,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       ],
     });
     await client.login(process.env.DISCORD_CLIENT_TOKEN);
-    const guild = await client.guilds.fetch("920413638441967656");
-    const activatedRole = await guild.roles.fetch("1039937716063850526");
-    const notActivatedRole = await guild.roles.fetch("1039937716768481362");
-    const lockedRole = await guild.roles.fetch("1039937739212202024");
+
+    const guild = await client.guilds.fetch(process.env.DISCORD_GUILD_ID!);
+    const activatedRole = await guild.roles.fetch(
+      process.env.DISCORD_GUILD_ACTIVAITED_ROLE_ID!
+    );
+    const notActivatedRole = await guild.roles.fetch(
+      process.env.DISCORD_GUILD_UNACTIVAITED_ROLE_ID!
+    );
+    const lockedRole = await guild.roles.fetch(
+      process.env.DISCORD_GUILD_LOCKED_ROLE_ID!
+    );
+
     await guild.members.fetch({ force: true, withPresences: true });
     const currentMembers = guild.memberCount!;
     const currentOnlineMembers = guild.approximatePresenceCount!;

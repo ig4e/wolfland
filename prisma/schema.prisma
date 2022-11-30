@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Application {
+  id                         String            @id @default(uuid()) @map("_id")
+  hidden                     Boolean           @default(false)
+  for                        ApplicationTypes  @default(ACTIVATE)
+  quetions                   Question[]
+  UserApplications           UserApplication[]
+  additionalUserInfoRequired Boolean           @default(true)
+  updatedAt                  DateTime          @updatedAt
+  createdAt                  DateTime          @default(now())
+}
+
+type Question {
+  id       String  @default(uuid()) @map("_id")
+  title    String
+  response String?
+}
+
+model User {
+  id           String            @id @default(uuid()) @map("_id")
+  discordID    String            @unique
+  applications UserApplication[]
+  updatedAt    DateTime          @updatedAt
+  createdAt    DateTime          @default(now())
+}
+
+model UserApplication {
+  id                 String                @id @default(uuid()) @map("_id")
+  user               User                  @relation(fields: [userId], references: [id])
+  application        Application           @relation(fields: [ApplicationId], references: [id])
+  quetions           Question[]
+  status             UserApplicationStatus @default(PENDING)
+  additionalUserInfo AdditionalUserInfo?
+  userId             String
+  ApplicationId      String
+  updatedAt          DateTime              @updatedAt
+  createdAt          DateTime              @default(now())
+}
+
+type AdditionalUserInfo {
+  name            String
+  age             Int
+  sonyAccountName String
+}
+
+enum ApplicationTypes {
+  ACTIVATE
+}
+
+enum UserApplicationStatus {
+  PENDING
+  ACCEPTED
+  REFUSED
+}

@@ -5,113 +5,129 @@
 @tailwind utilities;
 
 @layer utilities {
-	body {
-		@apply bg-root text-neutral font-cairo;
-	}
-	.btn-primary {
-		@apply bg-primary select-none hover:bg-primary-hover active:bg-primary-active transition rounded-full px-4 md:px-8 py-1.5 font-bold whitespace-nowrap;
-	}
-	.btn-primary-outline {
-		@apply border-2 border-primary select-none text-primary hover:border-primary-hover active:border-primary-active hover:text-primary-hover active:text-primary-active transition rounded-full px-4 md:px-8 py-1.5 font-bold;
-	}
+  body {
+    @apply bg-root font-cairo text-neutral;
+  }
+  .btn-primary {
+    @apply flex select-none justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 py-1.5 font-bold transition  hover:bg-primary-hover active:bg-primary-active md:px-8;
+  }
+  .btn-primary-outline {
+    @apply flex select-none justify-center gap-2 rounded-full border-2 border-primary px-4 py-1.5 font-bold text-primary transition hover:border-primary-hover hover:text-primary-hover  active:border-primary-active active:text-primary-active md:px-8;
+  }
 
-	.btn-secondary {
-		@apply btn-primary !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active;
-	}
-	.btn-secondary-outline {
-		@apply border-2 border-secondary select-none text-secondary hover:border-secondary-hover active:border-secondary-active hover:text-secondary-hover active:text-secondary-active transition rounded-full px-4 md:px-8 py-1.5 font-bold;
-	}
+  .btn-secondary {
+    @apply btn-primary flex justify-center gap-2  !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active;
+  }
+  .btn-secondary-outline {
+    @apply flex select-none justify-center gap-2 rounded-full border-2 border-secondary px-4 py-1.5 font-bold text-secondary transition hover:border-secondary-hover hover:text-secondary-hover  active:border-secondary-active active:text-secondary-active md:px-8;
+  }
 
-	.bg-tri-y-clip::before {
-		@apply bg-gradient-to-r from-primary to-root bg-cover bg-no-repeat -z-10;
-	}
+  .bg-tri-y-clip::before {
+    @apply -z-10 bg-gradient-to-r from-primary to-root bg-cover bg-no-repeat;
+  }
 
-	.bg-tri-r-clip::before {
-		@apply bg-gradient-to-r from-secondary to-root bg-cover bg-no-repeat -z-10;
-	}
+  .bg-tri-r-clip::before {
+    @apply -z-10 bg-gradient-to-r from-secondary to-root bg-cover bg-no-repeat;
+  }
 
-	.bg-tri-y-clip::before {
-		content: "";
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%);
-	}
+  .bg-tri-y-clip::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%);
+  }
 
-	.bg-tri-r-clip::before {
-		content: "";
-		position: absolute;
-		width: 100%;
-		height: 89%;
-		clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 50%);
-	}
+  .bg-tri-r-clip::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 89%;
+    clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 50%);
+  }
 
-	@media only screen and (max-width: 600px) {
-		.bg-tri-y-clip::before {
-			content: "";
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
-		}
+  @media only screen and (max-width: 600px) {
+    .bg-tri-y-clip::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
+    }
 
-		.bg-tri-r-clip::before {
-			content: "";
-			position: absolute;
-			width: 100%;
-			height: 89%;
-			clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 30%);
-		}
-	}
+    .bg-tri-r-clip::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 89%;
+      clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 30%);
+    }
+  }
 
-	/* width */
-	::-webkit-scrollbar {
-		@apply w-2;
-	}
+  /* width */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
 
-	/* Track */
-	::-webkit-scrollbar-track {
-		@apply bg-root-100;
-	}
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-root-100;
+  }
 
-	/* Handle */
-	::-webkit-scrollbar-thumb {
-		@apply bg-root-200 rounded-full;
-	}
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-root-200;
+  }
 
-	.AccordionContent[data-state="open"] {
-		animation: slideDown 350ms cubic-bezier(0.87, 0, 0.13, 1);
-	}
-	.AccordionContent[data-state="closed"] {
-		animation: slideUp 350ms cubic-bezier(0.87, 0, 0.13, 1);
-	}
-
+  .AccordionContent[data-state="open"] {
+    animation: slideDown 350ms cubic-bezier(0.87, 0, 0.13, 1);
+  }
+  .AccordionContent[data-state="closed"] {
+    animation: slideUp 350ms cubic-bezier(0.87, 0, 0.13, 1);
+  }
+  /*
 	.AccordionContent:last-child {
 		@apply rounded-md;
 	}
+	*/
+  .AccordionChevron {
+    transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
+  }
+  .AccordionTrigger[data-state="open"] > .AccordionChevron {
+    transform: rotate(-180deg);
+  }
 
-	.AccordionChevron {
-		transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
-	}
-	.AccordionTrigger[data-state="open"] > .AccordionChevron {
-		transform: rotate(-180deg);
-	}
+  .Input {
+    width: 100%;
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 15px;
+    line-height: 1;
+    height: 35px;
+  }
+  .Input:focus {
+    box-shadow: 0 0 0 2px var(black);
+  }
 
-	@keyframes slideDown {
-		from {
-			height: 0;
-		}
-		to {
-			height: var(--radix-accordion-content-height);
-		}
-	}
+  @keyframes slideDown {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
 
-	@keyframes slideUp {
-		from {
-			height: var(--radix-accordion-content-height);
-		}
-		to {
-			height: 0;
-		}
-	}
+  @keyframes slideUp {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
 }
