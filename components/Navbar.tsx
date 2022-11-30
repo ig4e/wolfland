@@ -34,7 +34,11 @@ function Navbar() {
     }
   }, [mobileNavOpen]);
 
-  const applyState = applyStatus[user?.userApplyApplication?.status as UserApplication["status"] || "PENDING"];
+  const applyState =
+    applyStatus[
+      (user?.userApplyApplication?.status as UserApplication["status"]) ||
+        "PENDING"
+    ];
 
   return (
     <nav className="relative h-[55px] md:h-[75px]">
@@ -108,7 +112,7 @@ function Navbar() {
                               </DropdownMenu.Item>
                             ))}
 
-                          {user?.admin && (
+                          {user?.mod && (
                             <DropdownMenu.Item asChild>
                               <Link
                                 href={"/dashboard"}
@@ -237,7 +241,7 @@ function Navbar() {
                     </Link>
                   ))}
 
-                {user?.admin && (
+                {user?.mod && (
                   <Link
                     onClick={() => setMobileNavOpen(!mobileNavOpen)}
                     href={"/dashboard"}

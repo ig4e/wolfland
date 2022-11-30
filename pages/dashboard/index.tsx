@@ -55,9 +55,9 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
 
   const {
     application: newApplication,
-    deleteQuestionTitle,
+    deleteQuestion,
     newQuestion,
-    updateQuestionTitle,
+    resetState,
   } = useNewApplicationStore();
 
   const [displayedApplications, setDisplayedApplications] =
@@ -84,7 +84,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
       </Layout>
     );
 
-  if (!user?.admin) {
+  if (!user?.mod) {
     setTimeout(() => {
       router.push("/");
     }, 2500);
@@ -177,148 +177,152 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
         </header>
 
         <div className="container mx-auto space-y-8">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between py-2">
-              <h1 className="text-xl">
-                النماذج ({displayedApplications.length})
-              </h1>
-            </div>
+          {user.admin && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-2">
+                <h1 className="text-xl">
+                  النماذج ({displayedApplications.length})
+                </h1>
+              </div>
 
-            <div className="grid grid-flow-row grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {displayedApplications.map((application) => {
-                return (
-                  <div
-                    key={application.id}
-                    className="flex flex-col gap-4 rounded-md bg-root-100 p-4"
-                  >
-                    <div>
-                      {[
-                        { title: "أيديى النموذج", value: application.id },
-                        {
-                          title: "تاريخ أضافة النموذج",
-                          value: moment(application.createdAt)
-                            .locale("ar")
-                            .format("MMMM Do YYYY, h:mm:ss a"),
-                        },
-                      ].map(({ title, value }) => {
-                        return (
-                          <div key={title + value + application.id}>
-                            <h1 className="font-bold">{title}:</h1>
-                            <span className="text-neutral-100">{value}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="space-y-2">
-                      <h1 className="font-bold">الأسئلة : </h1>
-                      <div className="flex flex-col gap-1">
-                        {application.questions.map((quetion, index) => {
+              <div className="grid grid-flow-row grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {displayedApplications.map((application) => {
+                  return (
+                    <div
+                      key={application.id}
+                      className="flex flex-col gap-4 rounded-md bg-root-100 p-4"
+                    >
+                      <div>
+                        {[
+                          { title: "أيديى النموذج", value: application.id },
+                          {
+                            title: "تاريخ أضافة النموذج",
+                            value: moment(application.createdAt)
+                              .locale("ar")
+                              .format("MMMM Do YYYY, h:mm:ss a"),
+                          },
+                        ].map(({ title, value }) => {
                           return (
-                            <div key={quetion.id}>
-                              <h3 className="flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-sm">
-                                س{index + 1} {quetion.title}
-                              </h3>
+                            <div key={title + value + application.id}>
+                              <h1 className="font-bold">{title}:</h1>
+                              <span className="text-neutral-100">{value}</span>
                             </div>
                           );
                         })}
                       </div>
-                    </div>
-
-                    <button
-                      onClick={() => deleteApplication(application.id)}
-                      className="btn-secondary w-full"
-                    >
-                      <TrashIcon className="h-6 w-6"></TrashIcon>
-                      <span>حذف النموذج</span>
-                    </button>
-                  </div>
-                );
-              })}
-
-              <Dialog.Root
-                open={newApplicationModalOpen}
-                onOpenChange={setNewApplicationModalOpen}
-              >
-                <Dialog.Trigger asChild>
-                  <button
-                    key={"new-application"}
-                    className="flex select-none flex-col items-center justify-center gap-4 rounded-md bg-root-100 p-6 transition hover:bg-root-200"
-                  >
-                    <div className="flex flex-col items-center justify-center ">
-                      <PlusIcon className="h-52 w-52"></PlusIcon>
-                      <span className="text-xl font-bold">
-                        اضف نموذجا جديدا
-                      </span>
-                    </div>
-                  </button>
-                </Dialog.Trigger>
-
-                <Dialog.Portal key={v4()}>
-                  <Dialog.Overlay className="fixed inset-0 z-50 grid place-items-center bg-root/50">
-                    <Dialog.Content className="max-h-screen h-full w-full max-w-xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4">
-                      <div className="flex items-center justify-between">
-                        <Dialog.Title className="text-xl font-bold">
-                          أضف نموذج جديد
-                        </Dialog.Title>
-                        <Dialog.Close className="rounded-full p-1.5 hover:bg-root-200/25 focus:bg-root-200/50 active:bg-root-200">
-                          <XMarkIcon className="h-5 w-5"></XMarkIcon>
-                        </Dialog.Close>
-                      </div>
 
                       <div className="space-y-2">
-                        <h1 className="text-lg font-semibold">
-                          ({newApplication.questions?.length}) الاسئلة
-                        </h1>
-                        <form
-                          className="flex flex-col gap-4"
-                          onSubmit={handleSubmit(onSubmit)}
-                        >
-                          {newApplication.questions?.map((quetion, index) => {
+                        <h1 className="font-bold">الأسئلة : </h1>
+                        <div className="flex flex-col gap-1">
+                          {application.questions.map((quetion, index) => {
                             return (
-                              <div key={quetion.id} className="space-y-2">
-                                <span className="text-xs">س{index + 1}</span>
-                                <div className="flex items-center gap-4">
-                                  <input
-                                    {...register(`quetion-${quetion.id}`)}
-                                    type={"text"}
-                                    className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
-                                  ></input>
-                                  <button
-                                    disabled={index === 0}
-                                    onClick={() =>
-                                      deleteQuestionTitle(quetion.id)
-                                    }
-                                    className="flex justify-center rounded bg-secondary p-2 disabled:bg-secondary/50"
-                                  >
-                                    <TrashIcon className="h-5 w-5"></TrashIcon>
-                                  </button>
-                                </div>
+                              <div key={quetion.id}>
+                                <h3 className="flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-sm">
+                                  س{index + 1} {quetion.title}
+                                </h3>
                               </div>
                             );
                           })}
-
-                          <button
-                            onClick={() => newQuestion()}
-                            className=" flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
-                          >
-                            <PlusIcon className="h-5 w-5"></PlusIcon>
-                            <span>أضف سؤالا جديدا</span>
-                          </button>
-
-                          <input
-                            className="flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
-                            type={"submit"}
-                            value={"أضف النموذج"}
-                          />
-                        </form>
+                        </div>
                       </div>
-                    </Dialog.Content>
-                  </Dialog.Overlay>
-                </Dialog.Portal>
-              </Dialog.Root>
+
+                      <button
+                        onClick={() => deleteApplication(application.id)}
+                        className="btn-secondary w-full"
+                      >
+                        <TrashIcon className="h-6 w-6"></TrashIcon>
+                        <span>حذف النموذج</span>
+                      </button>
+                    </div>
+                  );
+                })}
+
+                <Dialog.Root
+                  open={newApplicationModalOpen}
+                  onOpenChange={setNewApplicationModalOpen}
+                >
+                  <Dialog.Trigger asChild>
+                    <button
+                      key={"new-application"}
+                      className="flex select-none flex-col items-center justify-center gap-4 rounded-md bg-root-100 p-6 transition hover:bg-root-200"
+                    >
+                      <div className="flex flex-col items-center justify-center ">
+                        <PlusIcon className="h-52 w-52"></PlusIcon>
+                        <span className="text-xl font-bold">
+                          اضف نموذجا جديدا
+                        </span>
+                      </div>
+                    </button>
+                  </Dialog.Trigger>
+
+                  <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 z-50 grid place-items-center bg-black/50">
+                      <Dialog.Content className="h-full max-h-screen w-full max-w-2xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4 md:h-auto">
+                        <div className="flex items-center justify-between">
+                          <Dialog.Title className="text-xl font-bold">
+                            أضف نموذج جديد
+                          </Dialog.Title>
+                          <Dialog.Close
+                            onClick={() => resetState()}
+                            className="rounded-full p-1.5 hover:bg-root-200/25 focus:bg-root-200/50 active:bg-root-200"
+                          >
+                            <XMarkIcon className="h-5 w-5"></XMarkIcon>
+                          </Dialog.Close>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h1 className="text-lg font-semibold">
+                            ({newApplication.questions?.length}) الاسئلة
+                          </h1>
+                          <form
+                            className="flex flex-col gap-4"
+                            onSubmit={handleSubmit(onSubmit)}
+                            key={v4()}
+                          >
+                            {newApplication.questions?.map((quetion, index) => {
+                              return (
+                                <div key={quetion.id} className="space-y-2">
+                                  <span className="text-xs">س{index + 1}</span>
+                                  <div className="flex items-center gap-4">
+                                    <input
+                                      {...register(`quetion-${quetion.id}`)}
+                                      type={"text"}
+                                      className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
+                                    ></input>
+                                    <button
+                                      disabled={index === 0}
+                                      onClick={() => deleteQuestion(quetion.id)}
+                                      className="flex justify-center rounded bg-secondary p-2 disabled:bg-secondary/50"
+                                    >
+                                      <TrashIcon className="h-5 w-5"></TrashIcon>
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                            <button
+                              onClick={() => newQuestion()}
+                              className=" flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                            >
+                              <PlusIcon className="h-5 w-5"></PlusIcon>
+                              <span>أضف سؤالا جديدا</span>
+                            </button>
+
+                            <input
+                              className="flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                              type={"submit"}
+                              value={"أضف النموذج"}
+                            />
+                          </form>
+                        </div>
+                      </Dialog.Content>
+                    </Dialog.Overlay>
+                  </Dialog.Portal>
+                </Dialog.Root>
+              </div>
             </div>
-          </div>
+          )}
           {[
             { title: "التقديمات الجارية", value: pendingUserApplications },
             { title: "التقديمات المرفوضة", value: refusedUserApplications },
@@ -467,7 +471,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                     <Accordion.Header className="rounded-md bg-root-100">
                                       <Accordion.Trigger className="AccordionTrigger flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-right hover:bg-root-200/25">
                                         <span>{title}</span>
-                                        <ChevronDownIcon className="AccordionChevron h-5 w-5 min-h-[1.25rem] min-w-[1.25rem] max-h-5 max-w-[1.25rem]"></ChevronDownIcon>
+                                        <ChevronDownIcon className="AccordionChevron h-5 max-h-5 min-h-[1.25rem] w-5 min-w-[1.25rem] max-w-[1.25rem]"></ChevronDownIcon>
                                       </Accordion.Trigger>
                                     </Accordion.Header>
                                     <Accordion.Content className="AccordionContent overflow-hidden bg-root px-4 text-neutral-100">

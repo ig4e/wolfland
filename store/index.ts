@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 interface User {
   id: string;
   admin: boolean;
+  mod: boolean;
   activated: boolean;
   locked: boolean;
   userApplyApplication?: UserApplication;
@@ -63,7 +64,8 @@ interface NewApplicationState {
   application: Partial<Application>;
   updateQuestionTitle: (id: string, value: string) => void;
   newQuestion: () => void;
-  deleteQuestionTitle: (id: string) => void;
+  deleteQuestion: (id: string) => void;
+  resetState: () => void;
 }
 
 export const useNewApplicationStore = create<NewApplicationState>()(
@@ -101,16 +103,25 @@ export const useNewApplicationStore = create<NewApplicationState>()(
         };
       });
     },
-    deleteQuestionTitle(id) {
+    deleteQuestion(id) {
       set((state) => {
         return {
           ...state,
           application: {
             ...state.application,
-            quetions: state.application.questions?.filter((q) => q.id !== id),
+            questions: state.application.questions?.filter((x) => x.id !== id),
           },
         };
       });
+    },
+    resetState() {
+      set((state) => ({
+        application: {
+          questions: [{ id: v4(), title: "", response: null }],
+          for: "ACTIVATE",
+          additionalUserInfoRequired: true,
+        },
+      }));
     },
   }))
 );

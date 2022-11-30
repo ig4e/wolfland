@@ -87,15 +87,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    const isUserAdmin =
-      user.roles.includes(managmentRoleId) ||
-      user.roles.some((role: string) => adminRolesIds.includes(role));
+    const isUserAdmin = user.roles.some((role: string) =>
+      adminRolesIds.includes(role)
+    );
+    const isUserMod = isUserAdmin || user.roles.includes(managmentRoleId);
     const isUserActivated = user.roles.includes(activatedRoleId);
     const isUserLocked = user.roles.includes(lockedRoleId);
 
     res.status(200).json({
       id: dbUser.id,
       admin: isUserAdmin,
+      mod: isUserMod,
       activated: isUserActivated,
       locked: isUserLocked,
       userApplyApplication: dbUser.applications.find(
