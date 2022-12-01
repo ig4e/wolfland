@@ -134,7 +134,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     keys.map((key) => {
       const [_, id] = key.split("quetion-");
       const value = d[key];
-      if (value.trim()) {
+      if (value && value?.trim()) {
         result.questions?.push({ id, title: value.trim(), response: null });
       }
     });
