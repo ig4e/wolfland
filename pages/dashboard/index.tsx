@@ -331,7 +331,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                     <button
                                       disabled={index === 0}
                                       onClick={() => deleteQuestion(quetion.id)}
-                                      className="flex justify-center rounded bg-secondary p-2 disabled:bg-secondary/50"
+                                      className="flex justify-center rounded-full bg-secondary p-2 hover:bg-secondary/80 active:bg-secondary/60 transition disabled:bg-secondary/50"
                                     >
                                       <TrashIcon className="h-5 w-5"></TrashIcon>
                                     </button>
@@ -342,7 +342,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
 
                             <button
                               onClick={() => newQuestion()}
-                              className=" flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                              className=" btn-primary-outline"
                             >
                               <PlusIcon className="h-5 w-5"></PlusIcon>
                               <span>أضف سؤالا جديدا</span>

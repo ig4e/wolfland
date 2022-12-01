@@ -221,7 +221,7 @@ const Apply: NextPage<ApplyPageProps> = ({ randomApplyApplication }) => {
                     })}
 
                     <input
-                      className="mt-2 flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                      className="mt-2 btn-primary"
                       type={"submit"}
                       value={"التالى"}
                     />
