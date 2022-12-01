@@ -18,7 +18,7 @@ interface ApplyPageProps {
 const Apply: NextPage<ApplyPageProps> = ({ randomApplyApplication }) => {
   const { user, loading } = useUserStore();
   const [formData, setFormData] = useState({
-    id: randomApplyApplication.id,
+    id: randomApplyApplication?.id,
     additionalUserInfo: {
       name: "",
       age: 0,
@@ -125,7 +125,7 @@ const Apply: NextPage<ApplyPageProps> = ({ randomApplyApplication }) => {
         <Layout>
           <div className="mt-4 rounded-md bg-root-100 p-6 py-8">
             {!randomApplyApplication ? (
-              <h1 className="text-center">حدث خطأ ما</h1>
+              <h1 className="text-center">لا يوجد نماذج تقديم الان!</h1>
             ) : user.activated ? (
               <h1 className="text-center">أنت مفعل بالفعل</h1>
             ) : (
