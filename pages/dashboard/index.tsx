@@ -54,10 +54,13 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
   const [newApplicationModalOpen, setNewApplicationModalOpen] = useState(false);
 
   const {
+    editing: newApplicationEditing,
     application: newApplication,
+    setEditing,
     deleteQuestion,
     newQuestion,
     resetState,
+    setApplication,
   } = useNewApplicationStore();
 
   const [displayedApplications, setDisplayedApplications] =
@@ -125,30 +128,48 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     });
   }
 
-  async function onSubmit(d: any) {
+  async function onSubmit(d: any, editing: boolean) {
     const keys = Object.keys(d);
     const result: Partial<Application> = { ...newApplication, questions: [] };
     keys.map((key) => {
       const [_, id] = key.split("quetion-");
       const value = d[key];
-      if (value) {
-        result.questions?.push({ id, title: value, response: null });
+      if (value.trim()) {
+        result.questions?.push({ id, title: value.trim(), response: null });
       }
     });
 
     setNewApplicationModalOpen(false);
 
-    try {
-      const { data } = await axios({
-        url: "/api/application/create",
-        method: "POST",
-        data: {
-          application: result,
-        },
-      });
-      setDisplayedApplications((state) => [...state, data]);
-    } catch (err) {
-      console.log(err);
+    if (!editing) {
+      try {
+        const { data } = await axios({
+          url: "/api/application/create",
+          method: "POST",
+          data: {
+            application: result,
+          },
+        });
+        setDisplayedApplications((state) => [...state, data]);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const { data } = await axios({
+          url: "/api/application/edit?applicationId=" + result.id,
+          method: "POST",
+          data: {
+            application: result,
+          },
+        });
+        setDisplayedApplications((state) => [
+          ...state.filter((app) => app.id !== result.id),
+          data,
+        ]);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     console.log(result);
@@ -219,7 +240,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                             return (
                               <div key={quetion.id}>
                                 <h3 className="flex w-full items-center justify-between rounded-md bg-root-200 py-2 px-4 text-sm">
-                                  س{index + 1} {quetion.title}
+                                  س{index + 1} | {quetion.title}
                                 </h3>
                               </div>
                             );
@@ -227,13 +248,25 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                         </div>
                       </div>
 
-                      <button
-                        onClick={() => deleteApplication(application.id)}
-                        className="btn-secondary w-full"
-                      >
-                        <TrashIcon className="h-6 w-6"></TrashIcon>
-                        <span>حذف النموذج</span>
-                      </button>
+                      <div className="flex flex-wrap items-center gap-4">
+                        <button
+                          onClick={() => {
+                            setEditing(true);
+                            setApplication(application);
+                            setNewApplicationModalOpen(true);
+                          }}
+                          className="btn-primary w-full"
+                        >
+                          <span>تعديل النموذج</span>
+                        </button>
+                        <button
+                          onClick={() => deleteApplication(application.id)}
+                          className="btn-secondary w-full"
+                        >
+                          <TrashIcon className="h-6 w-6"></TrashIcon>
+                          <span>حذف النموذج</span>
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -261,7 +294,9 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                       <Dialog.Content className="h-full max-h-screen w-full max-w-2xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4 md:h-auto">
                         <div className="flex items-center justify-between">
                           <Dialog.Title className="text-xl font-bold">
-                            أضف نموذج جديد
+                            {newApplicationEditing
+                              ? "تعديل نموذج"
+                              : "أضف نموذج جديد"}
                           </Dialog.Title>
                           <Dialog.Close
                             onClick={() => resetState()}
@@ -277,7 +312,9 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                           </h1>
                           <form
                             className="flex flex-col gap-4"
-                            onSubmit={handleSubmit(onSubmit)}
+                            onSubmit={handleSubmit((e) =>
+                              onSubmit(e, newApplicationEditing)
+                            )}
                             key={v4()}
                           >
                             {newApplication.questions?.map((quetion, index) => {
@@ -289,6 +326,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                       {...register(`quetion-${quetion.id}`)}
                                       type={"text"}
                                       className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
+                                      defaultValue={quetion.title}
                                     ></input>
                                     <button
                                       disabled={index === 0}
@@ -311,9 +349,13 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                             </button>
 
                             <input
-                              className="flex h-9 items-center justify-center gap-2 rounded bg-root-200 text-center ring-2 ring-root hover:bg-root-200/25 focus:bg-root-200/50 focus:outline-none focus:ring-4 active:bg-root-200"
+                              className="btn-primary"
                               type={"submit"}
-                              value={"أضف النموذج"}
+                              value={
+                                newApplicationEditing
+                                  ? "تعديل نموذج"
+                                  : "أضف النموذج"
+                              }
                             />
                           </form>
                         </div>
@@ -577,8 +619,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       return { ...application, userDiscord: await discordUserInfo.json() };
     })
   );
-  //discord.com/api/v10/users/830090378039394405
-  https: return {
+
+  return {
     props: {
       applications: JSON.parse(JSON.stringify(applications)),
       userApplications: JSON.parse(

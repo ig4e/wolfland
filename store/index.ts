@@ -61,19 +61,41 @@ export const useUserStore = create<UserState>()(
 );
 
 interface NewApplicationState {
+  editing: boolean;
   application: Partial<Application>;
   updateQuestionTitle: (id: string, value: string) => void;
   newQuestion: () => void;
   deleteQuestion: (id: string) => void;
   resetState: () => void;
+  setApplication: (application: Partial<Application>) => void;
+  setEditing: (editing: boolean) => void;
 }
 
 export const useNewApplicationStore = create<NewApplicationState>()(
   devtools((set) => ({
+    editing: false,
     application: {
       questions: [{ id: v4(), title: "", response: null }],
       for: "ACTIVATE",
       additionalUserInfoRequired: true,
+    },
+
+    setEditing(editing) {
+      set((state) => {
+        return {
+          ...state,
+          editing,
+        };
+      });
+    },
+
+    setApplication(application) {
+      set((state) => {
+        return {
+          ...state,
+          application,
+        };
+      });
     },
     updateQuestionTitle(id, value) {
       set((state) => {
@@ -114,8 +136,10 @@ export const useNewApplicationStore = create<NewApplicationState>()(
         };
       });
     },
+
     resetState() {
       set((state) => ({
+        editing: false,
         application: {
           questions: [{ id: v4(), title: "", response: null }],
           for: "ACTIVATE",
