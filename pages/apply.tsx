@@ -57,7 +57,7 @@ const Apply: NextPage<ApplyPageProps> = ({ randomApplyApplication }) => {
           return {
             title: question.title,
             type: "text",
-            key: "question-" + question.id,
+            key: "question-" + question?.id,
             required: true,
           };
         });
