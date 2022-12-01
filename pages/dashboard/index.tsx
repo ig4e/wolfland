@@ -164,6 +164,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
             content="Wolfland - عالم الخيال والابداع فى الرول بلاى"
           />
           <link rel="icon" href="/favicon.ico" />
+          <meta property="og:image" content="/favicon.png"></meta>
         </Head>
         <header className="bg-gradient-to-r from-primary to-root py-10">
           <div className="container mx-auto flex flex-col items-start gap-4">

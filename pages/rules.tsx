@@ -332,6 +332,7 @@ function Rules() {
             content="Wolfland - عالم الخيال والابداع فى الرول بلاى"
           />
           <link rel="icon" href="/favicon.ico" />
+          <meta property="og:image" content="/favicon.png"></meta>
         </Head>
         <header className="bg-gradient-to-r from-primary to-root py-10">
           <div className="container mx-auto flex flex-col items-start gap-4">
@@ -346,7 +347,6 @@ function Rules() {
         </header>
 
         <div className="container mx-auto space-y-8">
-
           <div className="flex flex-col items-center justify-center gap-4 text-center md:hidden">
             <div className="flex items-center gap-4 text-4xl font-bold md:text-5xl lg:text-5xl">
               <Image

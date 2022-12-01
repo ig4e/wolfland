@@ -164,6 +164,8 @@ const Home: NextPage<IPageProps> = ({
           content="Wolfland - عالم الخيال والابداع فى الرول بلاى"
         />
         <link rel="icon" href="/favicon.ico" />
+
+        <meta property="og:image" content="/favicon.png"></meta>
       </Head>
       <main className="">
         <section className="bg-tri-y-clip relative">
