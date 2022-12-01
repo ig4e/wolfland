@@ -134,7 +134,11 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     keys.map((key) => {
       const [_, id] = key.split("quetion-");
       const value = d[key];
-      if (value && value?.trim()) {
+      if (
+        value &&
+        value?.trim() &&
+        newApplication.questions?.some((q) => q.id === id)
+      ) {
         result.questions?.push({ id, title: value.trim(), response: null });
       }
     });
@@ -331,7 +335,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                                     <button
                                       disabled={index === 0}
                                       onClick={() => deleteQuestion(quetion.id)}
-                                      className="flex justify-center rounded-full bg-secondary p-2 hover:bg-secondary/80 active:bg-secondary/60 transition disabled:bg-secondary/50"
+                                      className="flex justify-center rounded-full bg-secondary p-2 transition hover:bg-secondary/80 active:bg-secondary/60 disabled:bg-secondary/50"
                                     >
                                       <TrashIcon className="h-5 w-5"></TrashIcon>
                                     </button>
