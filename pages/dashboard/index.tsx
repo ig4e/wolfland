@@ -538,16 +538,30 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     where: { hidden: false },
   });
 
-  const userApplications = await prisma.userApplication.findMany({
+  const pendingUserApplications = await prisma.userApplication.findMany({
+    where: { status: "PENDING" },
     orderBy: { createdAt: "desc" },
     include: {
       application: true,
       user: true,
     },
-    take: 250,
   });
 
-  console.log(applications, userApplications);
+  const acceptedOrRefuseDuserApplications =
+    await prisma.userApplication.findMany({
+      where: { OR: [{ status: "ACCEPTED" }, { status: "REFUSED" }] },
+      orderBy: { updatedAt: "desc" },
+      include: {
+        application: true,
+        user: true,
+      },
+      take: 25,
+    });
+
+  const userApplications = [
+    ...pendingUserApplications,
+    ...acceptedOrRefuseDuserApplications,
+  ];
 
   const userApplicationsWithDiscordUserInfo = await Promise.all(
     userApplications.map(async (application) => {
