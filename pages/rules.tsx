@@ -1,6 +1,11 @@
 import React from "react";
 import LayoutNoContainer from "../components/Layouts/LayoutNoContainer";
 import wezaraDahelya from "../public/images/wezara-dahelya.webp";
+import wezaraAdl from "../public/images/wezara-adl.png";
+
+
+
+
 import Image from "next/image";
 import Head from "next/head";
 
@@ -214,7 +219,7 @@ function Rules() {
     {
       title: "قوانين العدل",
       desc: `هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها.`,
-      logo: wezaraDahelya,
+      logo: wezaraAdl,
       rules: [
         {
           header: "الدوام الرسمي للقاضي",
