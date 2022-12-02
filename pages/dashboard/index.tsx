@@ -218,12 +218,18 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                       key={application.id}
                       className="flex flex-col gap-4 rounded-md bg-root-100 p-4"
                     >
-                      <div>
+                      <div className="space-y-2">
                         {[
                           { title: "أيديى النموذج", value: application.id },
                           {
                             title: "تاريخ أضافة النموذج",
                             value: moment(application.createdAt)
+                              .locale("ar")
+                              .format("MMMM Do YYYY, h:mm:ss a"),
+                          },
+                          {
+                            title: "تاريخ أخر تعديل للنموذج",
+                            value: moment(application.updatedAt)
                               .locale("ar")
                               .format("MMMM Do YYYY, h:mm:ss a"),
                           },

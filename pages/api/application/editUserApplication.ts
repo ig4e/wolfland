@@ -5,6 +5,8 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 import { UserApplication } from "@prisma/client";
 
+import util from "util";
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await unstable_getServerSession(req, res, authOptions);
   if (session && session.user) {
@@ -26,6 +28,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const unActivatedRoleId = process.env.DISCORD_GUILD_UNACTIVAITED_ROLE_ID!;
 
     if (newStatus === "ACCEPTED") {
+      const { idNumber: lastIDNumber } = (await prisma.user.findFirst({
+        where: { NOT: { idNumber: undefined } },
+        orderBy: {
+          idNumber: "desc",
+        },
+      }))!;
+
+      const user = await prisma.user.update({
+        where: { id: userApplication.user.id },
+        data: {
+          idNumber: lastIDNumber ? lastIDNumber + 1 : 1040,
+        },
+      })!;
+
       await fetch(
         `https://discord.com/api/v10/guilds/${guildId}/members/${userApplication.user.discordID}/roles/${activatedRoleId}`,
         {
@@ -43,9 +59,30 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           headers: {
             Authorization: "Bot " + process.env.DISCORD_CLIENT_TOKEN!,
           },
+        }
+      );
+
+      await fetch(
+        `https://discord.com/api/v10/guilds/${guildId}/members/${userApplication.user.discordID}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: "Bot " + process.env.DISCORD_CLIENT_TOKEN!,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nick: `${userApplication.additionalUserInfo?.sonyAccountName} #${user.idNumber}`,
+          }),
         }
       );
     } else {
+      await prisma.user.update({
+        where: { id: userApplication.user.id },
+        data: {
+          idNumber: undefined,
+        },
+      })!;
+
       await fetch(
         `https://discord.com/api/v10/guilds/${guildId}/members/${userApplication.user.discordID}/roles/${activatedRoleId}`,
         {
@@ -63,6 +100,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           headers: {
             Authorization: "Bot " + process.env.DISCORD_CLIENT_TOKEN!,
           },
+        }
+      );
+
+      await fetch(
+        `https://discord.com/api/v10/guilds/${guildId}/members/${userApplication.user.discordID}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: "Bot " + process.env.DISCORD_CLIENT_TOKEN!,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nick: `${session.user.name}`,
+          }),
         }
       );
     }

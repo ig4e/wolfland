@@ -17,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       id: string;
     } = session.user as any;
 
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       where: { discordID: sessionUser.id },
       include: { applications: { include: { application: true } } },
     });
@@ -27,7 +27,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     if (!user || !application)
-      return res.status(400).json({ success: false, error: "رقم تعريف النموذج خاطئ" });
+      return res
+        .status(400)
+        .json({ success: false, error: "رقم تعريف النموذج خاطئ" });
 
     if (application.hidden)
       return res.status(400).json({ success: false, error: "نموذج خاطئ" });
@@ -53,7 +55,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           !application?.questions.some((aq) => aq.id === question.id)
       )
     )
-      return res.status(400).json({ success: false, error: "أجابات الاسئلة او الاسئلة بها خطاء" });
+      return res
+        .status(400)
+        .json({ success: false, error: "أجابات الاسئلة او الاسئلة بها خطاء" });
 
     if (
       (application.additionalUserInfoRequired && !additionalUserInfo) ||

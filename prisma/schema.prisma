@@ -29,6 +29,7 @@ type Question {
 
 model User {
   id           String            @id @default(uuid()) @map("_id")
+  idNumber     Int?
   discordID    String            @unique
   applications UserApplication[]
   updatedAt    DateTime          @updatedAt
