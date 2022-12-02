@@ -71,7 +71,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            nick: `${userApplication.additionalUserInfo?.sonyAccountName} #${user.idNumber}`,
+            nick: `${userApplication.additionalUserInfo?.sonyAccountName}#${user.idNumber}`,
           }),
         }
       );
