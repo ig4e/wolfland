@@ -175,7 +175,7 @@ export const getStaticProps: GetStaticProps = async ({}) => {
     props: {
       rules: serverSettings?.rules,
     },
-    revalidate: 900,
+    revalidate: 60,
   };
 };
 

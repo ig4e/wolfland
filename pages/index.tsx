@@ -14,7 +14,7 @@ import Logo from "../public/images/logo.svg";
 import Link from "next/link";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import * as Accordion from "@radix-ui/react-accordion";
-import { GetServerSideProps, NextPage } from "next";
+import { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import { Client, GatewayIntentBits } from "discord.js";
 
 interface IPageProps {
@@ -340,7 +340,7 @@ const Home: NextPage<IPageProps> = ({
 
 export default Home;
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getStaticProps: GetStaticProps = async ({}) => {
   if (process.env.NODE_ENV === "development")
     return {
       props: {
@@ -354,10 +354,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
 
   try {
-    res.setHeader(
-      "Cache-Control",
-      "public, s-maxage=21600, stale-while-revalidate=86400"
-    );
     const client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -412,6 +408,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         currentLockedMembers: formater.format(currentLockedMembers),
         currentNotActivatedMembers: formater.format(currentNotActivatedMembers),
       },
+      revalidate: 21600,
     };
   } catch {
     return {
@@ -423,6 +420,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         currentLockedMembers: "N/A",
         currentNotActivatedMembers: "N/A",
       },
+      revalidate: 500,
     };
   }
 };
