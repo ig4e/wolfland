@@ -1,9 +1,20 @@
-import "../styles/globals.css";
+import Router from "next/router";
 import type { AppProps } from "next/app";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useUserStore } from "../store";
+import NProgress from "nprogress"; //nprogress module
+import "../styles/Nprogress.css";
+import "../styles/globals.css";
+
+
+//Route Events.
+NProgress.configure({ });
+
+Router.events.on("routeChangeStart", () => NProgress.start());
+Router.events.on("routeChangeComplete", () => NProgress.done());
+Router.events.on("routeChangeError", () => NProgress.done());
 
 export default function App({
   Component,
