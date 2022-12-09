@@ -1,4 +1,9 @@
-import { Application, UserApplication } from "@prisma/client";
+import {
+  Application,
+  Rule,
+  RuleSection,
+  UserApplication,
+} from "@prisma/client";
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { signOut } from "next-auth/react";
@@ -72,8 +77,9 @@ interface NewApplicationState {
 }
 
 export const useNewApplicationStore = create<NewApplicationState>()(
+  //@ts-ignore
   devtools((set) => ({
-    editing: false,
+    editing: false as any,
     application: {
       questions: [{ id: v4(), title: "", response: null }],
       for: "ACTIVATE",
@@ -139,12 +145,98 @@ export const useNewApplicationStore = create<NewApplicationState>()(
 
     resetState() {
       set((state) => ({
-        editing: false,
+        editing: false as any,
         application: {
           questions: [{ id: v4(), title: "", response: null }],
           for: "ACTIVATE",
           additionalUserInfoRequired: true,
         },
+      }));
+    },
+  }))
+);
+
+interface EditRulesState {
+  open: boolean;
+  rules: RuleSection[];
+  setOpen: (state: boolean) => void;
+  addNewSection: () => void;
+  removeSection: (sectionId: string) => void;
+  addNewRuleInSection: (sectionId: string) => void;
+  removeRuleInSection: (sectionId: string, ruleId: string) => void;
+  setRules: (rules: RuleSection[]) => void;
+}
+
+export const useEditRulesStore = create<EditRulesState>()(
+  devtools((set) => ({
+    open: false as any,
+    rules: [
+      {
+        id: v4(),
+        title: "",
+        imageUrl: "",
+        description: "",
+        apply: false as any,
+        rules: [{ id: v4(), title: "", value: "" }],
+      },
+    ],
+    setOpen: (stat) => {
+      set((state) => ({
+        ...state,
+        open: stat,
+      }));
+    },
+    addNewSection() {
+      set((state) => ({
+        ...state,
+        rules: [
+          ...state.rules,
+          {
+            id: v4(),
+            title: "",
+            imageUrl: "",
+            description: "",
+            apply: false as any,
+            rules: [{ id: v4(), title: "", value: "" }],
+          },
+        ],
+      }));
+    },
+    removeSection(sectionId) {
+      set((state) => ({
+        ...state,
+        rules: state.rules.filter((section) => section.id !== sectionId),
+      }));
+    },
+    addNewRuleInSection(sectionId) {
+      set((state) => ({
+        ...state,
+        rules: state.rules.map((section) => {
+          if (section.id === sectionId) {
+            section.rules = [
+              ...section.rules,
+              { id: v4(), title: "", value: "" },
+            ];
+          }
+          return section;
+        }),
+      }));
+    },
+    setRules(rules) {
+      set((state) => ({
+        ...state,
+        rules: rules,
+      }));
+    },
+    removeRuleInSection(sectionId, ruleId) {
+      set((state) => ({
+        ...state,
+        rules: state.rules.map((section) => {
+          if (section.id === sectionId) {
+            section.rules = section.rules.filter((rule) => rule.id !== ruleId);
+          }
+          return section;
+        }),
       }));
     },
   }))

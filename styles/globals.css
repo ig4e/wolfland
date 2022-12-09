@@ -12,14 +12,15 @@
     @apply disabled:opacity-50 flex select-none justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 py-1.5 font-bold transition  hover:bg-primary-hover active:bg-primary-active md:px-8;
   }
   .btn-primary-outline {
-    @apply disabled:opacity-50 flex select-none justify-center gap-2 rounded-full border-2 border-primary px-4 py-1.5 font-bold text-primary transition hover:border-primary-hover hover:text-primary-hover  active:border-primary-active active:text-primary-active md:px-8;
+    @apply disabled:opacity-50 flex select-none justify-center gap-2 rounded-full border-2 border-primary px-4 py-1 font-bold text-primary transition hover:border-primary-hover hover:text-primary-hover  active:border-primary-active active:text-primary-active md:px-8;
   }
 
   .btn-secondary {
     @apply disabled:opacity-50 btn-primary flex justify-center gap-2  !bg-secondary hover:!bg-secondary-hover active:!bg-secondary-active;
   }
+
   .btn-secondary-outline {
-    @apply disabled:opacity-50 flex select-none justify-center gap-2 rounded-full border-2 border-secondary px-4 py-1.5 font-bold text-secondary transition hover:border-secondary-hover hover:text-secondary-hover  active:border-secondary-active active:text-secondary-active md:px-8;
+    @apply disabled:opacity-50 flex select-none justify-center gap-2 rounded-full border-2 border-secondary px-4 py-1 font-bold text-secondary transition hover:border-secondary-hover hover:text-secondary-hover  active:border-secondary-active active:text-secondary-active md:px-8;
   }
 
   .bg-tri-y-clip::before {

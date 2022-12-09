@@ -5,9 +5,20 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layouts";
 import LayoutNoContainer from "../../components/Layouts/LayoutNoContainer";
-import { useNewApplicationStore, useUserStore } from "../../store";
+import {
+  useEditRulesStore,
+  useNewApplicationStore,
+  useUserStore,
+} from "../../store";
 import { prisma } from "../../db";
-import { Application, User, UserApplication } from "@prisma/client";
+import {
+  Application,
+  MainSettings,
+  Rule,
+  RuleSection,
+  User,
+  UserApplication,
+} from "@prisma/client";
 import "moment/locale/ar";
 import moment from "moment";
 import * as Accordion from "@radix-ui/react-accordion";
@@ -43,11 +54,13 @@ interface DashboardHomeProps {
     user: User;
     userDiscord: DiscordUser;
   })[];
+  serverSettings: MainSettings;
 }
 
 const DashboardHome: NextPage<DashboardHomeProps> = ({
   applications,
   userApplications,
+  serverSettings,
 }) => {
   const { user, loading } = useUserStore();
   const router = useRouter();
@@ -62,6 +75,8 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     resetState,
     setApplication,
   } = useNewApplicationStore();
+
+  const editRulesStore = useEditRulesStore();
 
   const [displayedApplications, setDisplayedApplications] =
     useState(applications);
@@ -79,6 +94,13 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
   );
 
   const { handleSubmit, register } = useForm();
+  const { handleSubmit: handleRulesSubmit, register: rulesRegister } =
+    useForm();
+
+  useEffect(() => {
+    if (serverSettings.rules.length > 0)
+      editRulesStore.setRules(serverSettings.rules);
+  }, []);
 
   if (loading)
     return (
@@ -128,7 +150,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     });
   }
 
-  async function onSubmit(d: any, editing: boolean) {
+  async function onApplicationSubmit(d: any, editing: boolean) {
     const keys = Object.keys(d);
     const result: Partial<Application> = { ...newApplication, questions: [] };
     keys.map((key) => {
@@ -179,6 +201,93 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
     console.log(result);
   }
 
+  async function onRulesSubmit(d: any) {
+    const data = Object.keys(d).map((key) => ({
+      ...Object.fromEntries(new URLSearchParams(key).entries()),
+      value: d[key],
+    })) as any as {
+      section: string;
+      rule?: string;
+      type: "info" | "rule" | "ruleTitle";
+      field?: "title" | "image" | "description";
+      value: string;
+    }[];
+
+    const result = {
+      rules: editRulesStore.rules
+        .map((section, index) => {
+          const title = data.find(
+            (input) =>
+              input.section === section.id &&
+              input.type == "info" &&
+              input.field === "title"
+          )?.value;
+
+          const description = data.find(
+            (input) =>
+              input.section === section.id &&
+              input.type == "info" &&
+              input.field === "description"
+          )?.value;
+
+          const imageUrl = data.find(
+            (input) =>
+              input.section === section.id &&
+              input.type == "info" &&
+              input.field === "image"
+          )?.value;
+
+          const sectionRules = data.filter(
+            (input) =>
+              input.section === section.id &&
+              input.type === "rule" &&
+              input.rule &&
+              section.rules.map((x) => x.id).includes(input.rule)
+          );
+
+          return {
+            title: title,
+            imageUrl: imageUrl,
+            description: description,
+            apply: index === 0,
+            rules: sectionRules
+              .map((ruleInput) => {
+                const ruleTitle = data.find(
+                  (input) =>
+                    input.section === ruleInput.section &&
+                    input.type === "ruleTitle" &&
+                    input.rule &&
+                    input.rule === ruleInput.rule
+                );
+
+                return { title: ruleTitle?.value, value: ruleInput.value };
+              })
+              .filter((rule) => rule.title && rule.value) as Rule[],
+          };
+        })
+        .filter(
+          (section) =>
+            section.title && section.imageUrl && section.rules.length > 0
+        ) as RuleSection[],
+    };
+
+    try {
+      const { data } = await axios({
+        url: "/api/rules/editRules",
+        method: "POST",
+        data: result,
+      });
+      console.log(data);
+      editRulesStore.setRules(data?.serverSettings?.rules);
+    } catch (err) {
+      console.log(err);
+    }
+
+    editRulesStore.setOpen(false);
+
+    console.log(result, "submit");
+  }
+
   return (
     <LayoutNoContainer>
       <main className="!mb-16 space-y-16">
@@ -202,7 +311,209 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
           </div>
         </header>
 
-        <div className="container mx-auto space-y-8">
+        <div className="container mx-auto !mt-4 space-y-8">
+          {user.admin && (
+            <div className="flex items-center justify-between py-2">
+              <h1 className="text-xl">القوانين</h1>
+
+              <Dialog.Root
+                open={editRulesStore.open}
+                onOpenChange={editRulesStore.setOpen}
+              >
+                <Dialog.Trigger asChild>
+                  <button className="btn-primary">
+                    <span>تعديل القوانين</span>
+                  </button>
+                </Dialog.Trigger>
+
+                <Dialog.Portal>
+                  <Dialog.Overlay className="fixed inset-0 z-50 grid place-items-center bg-black/50">
+                    <Dialog.Content className="h-full max-h-screen w-full max-w-2xl space-y-4 overflow-y-scroll rounded-md bg-root-100 p-4 md:h-auto">
+                      <div className="flex items-center justify-between">
+                        <Dialog.Title className="text-xl font-bold">
+                          تعديل القوانين
+                        </Dialog.Title>
+                        <Dialog.Close className="rounded-full p-1.5 hover:bg-root-200/25 focus:bg-root-200/50 active:bg-root-200">
+                          <XMarkIcon className="h-5 w-5"></XMarkIcon>
+                        </Dialog.Close>
+                      </div>
+
+                      <form onSubmit={handleRulesSubmit(onRulesSubmit)}>
+                        {editRulesStore.rules.map((rule, index) => {
+                          return (
+                            <div
+                              key={rule.id}
+                              className={`space-y-2 ${
+                                index !== editRulesStore.rules.length - 1 &&
+                                "border-b-[3px]"
+                              } border-root-200 py-4`}
+                            >
+                              <h3 className="text-lg">{index+1} - معلومات القسم</h3>
+
+                              <div className="flex flex-wrap items-center gap-2">
+                                {[
+                                  {
+                                    id: "title",
+                                    title: "الأسم",
+                                    value: rule.title,
+                                  },
+                                  {
+                                    id: "description",
+                                    title: "تعريف القانون",
+                                    value: rule.description,
+                                    textArea: true,
+                                  },
+                                  {
+                                    id: "image",
+                                    title:
+                                      "رابط الصورة (يفضل استعمال صورة قليلة الحجم)",
+                                    value: rule.imageUrl,
+                                  },
+                                ]?.map(
+                                  ({ id, title, value, textArea }, index) => {
+                                    return (
+                                      <div
+                                        key={id}
+                                        className="w-full space-y-2"
+                                      >
+                                        <span className="text-xs">{title}</span>
+                                        <div className="flex items-center gap-4">
+                                          {textArea ? (
+                                            <textarea
+                                              {...rulesRegister(
+                                                `section=${rule.id}&type=info&field=${id}`
+                                              )}
+                                              className="w-full resize-none rounded-md bg-root-200 p-2 ring-2 ring-root focus:outline-none focus:ring-4"
+                                              placeholder={title}
+                                              defaultValue={value}
+                                              required={true}
+                                            ></textarea>
+                                          ) : (
+                                            <input
+                                              {...rulesRegister(
+                                                `section=${rule.id}&type=info&field=${id}`
+                                              )}
+                                              type={"text"}
+                                              className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
+                                              placeholder={title}
+                                              defaultValue={value}
+                                              required={true}
+                                            ></input>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                                )}
+                              </div>
+
+                              <div className="space-y-4">
+                                <h3 className="text-lg">قوانين القسم</h3>
+
+                                <div className="flex flex-wrap items-center gap-2">
+                                  {rule.rules?.map(
+                                    ({ id, title, value }, index) => {
+                                      return (
+                                        <div
+                                          key={id}
+                                          className="w-full space-y-2"
+                                        >
+                                          <span className="text-xs">
+                                            أسم القانون
+                                          </span>
+                                          <input
+                                            {...rulesRegister(
+                                              `section=${rule.id}&type=ruleTitle&rule=${id}`
+                                            )}
+                                            type={"text"}
+                                            className="Input bg-root-200 ring-2 ring-root focus:outline-none focus:ring-4"
+                                            defaultValue={title}
+                                            placeholder={"أسم القانون"}
+                                            required={true}
+                                          ></input>
+                                          <div className="space-y-2">
+                                            <span className="text-xs">
+                                              نص القانون
+                                            </span>
+                                            <div className="flex flex-col items-center gap-4">
+                                              <textarea
+                                                {...rulesRegister(
+                                                  `section=${rule.id}&type=rule&rule=${id}`
+                                                )}
+                                                className="h-32 w-full resize-none rounded-md bg-root-200 p-2 ring-2 ring-root focus:outline-none focus:ring-4"
+                                                defaultValue={value}
+                                                required={true}
+                                                placeholder={"نص القانون"}
+                                              ></textarea>
+
+                                              <button
+                                                disabled={index === 0}
+                                                onClick={() =>
+                                                  editRulesStore.removeRuleInSection(
+                                                    rule.id,
+                                                    id
+                                                  )
+                                                }
+                                                className="flex w-full justify-center rounded-full bg-secondary p-2 transition hover:bg-secondary/80 active:bg-secondary/60 disabled:bg-secondary/50"
+                                              >
+                                                <TrashIcon className="h-5 w-5"></TrashIcon>
+                                              </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      );
+                                    }
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      editRulesStore.addNewRuleInSection(
+                                        rule.id
+                                      )
+                                    }
+                                    className="btn-primary-outline w-full"
+                                  >
+                                    <span>أضافة قانون</span>
+                                  </button>
+                                  <button
+                                    disabled={index === 0}
+                                    onClick={() =>
+                                      editRulesStore.removeSection(rule.id)
+                                    }
+                                    className="btn-secondary-outline w-full"
+                                  >
+                                    <span>حذف القسم</span>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                        <div className="mt-4 space-y-4">
+                          <button
+                            type="button"
+                            onClick={() => editRulesStore.addNewSection()}
+                            className="btn-primary-outline w-full"
+                          >
+                            <span>أضافة قسم</span>
+                          </button>
+
+                          <input
+                            type="submit"
+                            className="btn-primary w-full"
+                            value={"حفظ"}
+                          ></input>
+                        </div>
+                      </form>
+                    </Dialog.Content>
+                  </Dialog.Overlay>
+                </Dialog.Portal>
+              </Dialog.Root>
+            </div>
+          )}
+
           {user.admin && (
             <div className="space-y-4">
               <div className="flex items-center justify-between py-2">
@@ -323,7 +634,7 @@ const DashboardHome: NextPage<DashboardHomeProps> = ({
                           <form
                             className="flex flex-col gap-4"
                             onSubmit={handleSubmit((e) =>
-                              onSubmit(e, newApplicationEditing)
+                              onApplicationSubmit(e, newApplicationEditing)
                             )}
                             key={v4()}
                           >
@@ -630,12 +941,26 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     })
   );
 
+  let serverSettings = await prisma.mainSettings.findUnique({
+    where: { id: "SERVER_SETTINGS" },
+  });
+
+  if (!serverSettings) {
+    serverSettings = await prisma.mainSettings.create({
+      data: {
+        id: "SERVER_SETTINGS",
+        nextUserIdNumber: 100,
+      },
+    });
+  }
+
   return {
     props: {
       applications: JSON.parse(JSON.stringify(applications)),
       userApplications: JSON.parse(
         JSON.stringify(userApplicationsWithDiscordUserInfo)
       ),
+      serverSettings,
     },
   };
 };
