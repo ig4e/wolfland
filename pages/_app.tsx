@@ -7,10 +7,10 @@ import { useUserStore } from "../store";
 import NProgress from "nprogress"; //nprogress module
 import "../styles/Nprogress.css";
 import "../styles/globals.css";
-
+import { Analytics } from "@vercel/analytics/react";
 
 //Route Events.
-NProgress.configure({ });
+NProgress.configure({});
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -43,8 +43,11 @@ export default function App({
   }, []);
 
   return (
-    <SessionProvider session={sessionProps}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <>
+      <SessionProvider session={sessionProps}>
+        <Component {...pageProps} />
+      </SessionProvider>
+      <Analytics />
+    </>
   );
 }
