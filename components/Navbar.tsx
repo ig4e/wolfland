@@ -116,7 +116,7 @@ function Navbar() {
                             <DropdownMenu.Item asChild>
                               <Link
                                 href={"/dashboard"}
-                                className="btn-primary w-full place-self-end self-end text-center"
+                                className="btn-primary-outline w-full place-self-end self-end text-center"
                               >
                                 <span>لوحة التحكم</span>
                               </Link>
@@ -245,7 +245,7 @@ function Navbar() {
                   <Link
                     onClick={() => setMobileNavOpen(!mobileNavOpen)}
                     href={"/dashboard"}
-                    className="btn-primary w-full place-self-end self-end text-center"
+                    className="btn-primary-outline w-full place-self-end self-end text-center"
                   >
                     <span>لوحة التحكم</span>
                   </Link>
