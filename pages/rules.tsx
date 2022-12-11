@@ -122,11 +122,11 @@ const Rules: NextPage<{ rules: RuleSection[] }> = ({ rules }) => {
                         ></p>
                       </Accordion.Content>
                     </Accordion.Item>
-                    {ruleSection.rules.map(({ title, value }) => {
+                    {ruleSection.rules.map(({ title, value }, index) => {
                       return (
                         <Accordion.Item
-                          key={title}
-                          value={title}
+                          key={title+value+index}
+                          value={title+value+index}
                           className="overflow-hidden"
                         >
                           <Accordion.Header className="rounded-md bg-root-100">
