@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const user = await prisma.user.update({
         where: { id: userApplication.user.id },
         data: {
-          idNumber: lastIDNumber ? lastIDNumber + 1 : 100,
+          idNumber: lastIDNumber ? lastIDNumber + 1 : 1100,
         },
       })!;
 
